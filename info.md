@@ -33,7 +33,7 @@ L'app trae spunto da:
 * [Covid19App](https://statgroup19.shinyapps.io/Covid19App/), realizzata dal gruppo di ricerca [StatGroup-19](https://www.uniroma1.it/it/notizia/statgroup-19). 
 * [Dashboard ufficiale](http://opendatadpc.maps.arcgis.com/apps/opsdashboard/index.html#/b0c68bce2cce478eaac82fe38d4138b1) per l'Italia, mantenuta dal Dipartimento della Protezione civile. <br/> <br/>
 
-Il codice per generare l'app è reso [qui](https://www.uniroma1.it/it/notizia/statgroup-19) disponibile.
+Il codice per generare l'app è reso [qui](https://github.com/zuccaandrea/Covid19App) disponibile.
 _____________________________________________________________________________________________________________________________________________________
 
 # Criticità e sviluppi futuri
