@@ -1,0 +1,167 @@
+.content-wrapper,
+.right-side {
+  background-color:#000000;
+}
+
+.skin-blue .main-header .navbar {
+  background-color:#222222
+}
+
+ul {
+  color: white;
+}
+
+h1 {
+  color: white;
+}
+
+h2 {
+  color: white;
+}
+
+p {
+  color: white;
+}
+
+.box {
+  border-style: solid;
+  background:#222222;
+  border-bottom-color:#666666;
+  border-left-color:#666666;
+  border-right-color:#666666;
+  border-top-color:#666666;
+  border-bottom-width:1px;
+  border-top-width:1px;
+  border-left-width:1px;
+  border-right-width:1px;
+}
+
+.box-header {
+ text-align: left;
+ color:#fff;
+ padding:10px;
+}
+
+.col-sm-2 .box-body {
+ text-align: center;
+ color: white;
+ font-size: 40px;
+}
+
+.Burst {
+ text-align: center;
+}
+
+.nav-tabs-custom {
+    margin-bottom: 20px;
+    background: #222222;
+    border-radius: 3px;
+    border-bottom: 1px solid #666666;
+    border-right: 1px solid #666666;
+    border-left: 1px solid #666666;
+    border-top: 1px solid #666666;
+}
+
+.nav-tabs-custom > .nav-tabs {
+    background: #222222;
+    border-bottom-color: #666666;
+}
+
+.nav-tabs-custom > .nav-tabs > li {
+    border-top: 3px solid transparent;
+    margin-bottom: -1px;
+    margin-right: 5px;
+}
+
+
+.nav-tabs-custom>.nav-tabs>li.active:hover>a, .nav-tabs-custom>.nav-tabs>li.active>a {
+    background-color: #222;
+    color: white;
+}
+
+.nav-tabs-custom>.nav-tabs>li.active {
+    border-top-color: #3c8dbc;
+    border-top-left-radius: 1px;
+    border-top-right-radius: 1px;
+}
+
+.nav-tabs-custom>.nav-tabs>li.active>a {
+    border-top-color: transparent;
+    border-left-color: #666;
+    border-right-color: #666;
+}
+
+.nav-tabs-custom>.tab-content {
+    background: #222222;
+}
+
+.cartesianlayer {
+  width: 200px;
+  height: 300px;
+}
+
+.plot-container .plotly {
+  background-color: red;
+}
+
+.valText {
+  font-size:40px;
+}
+
+.varText {
+  font-size:20px;
+}
+
+
+
+#deTable {
+  color: white;
+}
+
+#deTable .dataTables_length {
+  color:white;
+}
+
+#deTable .dataTables_filter {
+  color: white;
+}
+
+#deTable .dataTables_info {
+  color: white;
+}
+
+#deTable .dataTable tbody tr {
+    background-color: #222;
+}
+
+
+#deTable select {
+  color: black;
+}
+
+#deTable input {
+  color: black;
+}
+
+#deTable .noUi-background {
+    background: #222222;
+}
+
+
+#deTable .dataTable thead tr td {
+    color: #222222;
+}
+
+
+#deTable .paginate_button {
+  color: #fff !important;
+}
+
+
+#deTable .paginate_button.current {
+    color: #222 !important;
+}
+
+
+
+
