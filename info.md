@@ -13,7 +13,7 @@ Andrea Zucca
 _____________________________________________________________________________________________________________________________________________________
 # L'App
 L'app, qui alla sua prima versione, rappresenta il progetto di fine corso in "Data visualization, data analytics, data modeling".<br/>
-Il corso, da me frequentato nell'anno accademico 2019-2020, è parte del Master universitario di II livello in "Big Data. Metodi statistici per la società della conoscenza" tenuto dal Dipartimento Scienze Statistiche dell'Università degli Studi di Roma "La Sapienza".
+Il corso è parte del Master universitario di II livello in "Big Data. Metodi statistici per la società della conoscenza" (A.A. 2019-2020). Dipartimento Scienze Statistiche. Università degli Studi di Roma "La Sapienza".
 _____________________________________________________________________________________________________________________________________________________
 
 # Funzionamento
@@ -39,7 +39,7 @@ ________________________________________________________________________________
 # Criticità e sviluppi futuri
 * La mappa per selezionare le regioni viene ricaricata ogni volta che l'utente seleziona o deseleziona una regione <br/> 
 *Problema risolvibile via JavaScript*
-* Con il passare dei mesi, all'aumentare dei dati, lo spazio disponibile per la visualizzazione delle serie storiche potrebbe non essere più sufficiente a una analisi visiva agile delle curve <br/>
-*Nonostante Plotly consenta di evidenziare porzioni di un grafico può essere utile prevedere una visualizzazione a schermo intero degli stessi*
+* Con il passare dei mesi, all'aumentare dei dati, lo spazio disponibile per la visualizzazione delle serie storiche potrebbe non essere sufficiente a una analisi visiva agile delle curve <br/>
+*Nonostante Plotly consenta di evidenziare porzioni di un grafico, può essere utile prevedere una visualizzazione a schermo intero degli stessi*
 * L'uso dei colori verde e rosso può aiutare a interpretare se un incremento o decremento, rispetto al giorno precedente, di una variabile del sommario, è un dato positivo o negativo nella lotta alla pandemia.
 * Implementare supporto multilingua.

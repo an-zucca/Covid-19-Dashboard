@@ -377,9 +377,9 @@ ui <- dashboardPage(skin = 'blue',
                     body)
 
 server <- function(input, output, session) {
-
-  output$CumCases <- renderUI(div(class = 'valText', prettyNum(summary()$totale_casi[1], big.mark =
-                                                                 " ")))
+  output$CumCases <-
+    renderUI(div(class = 'valText', prettyNum(summary()$totale_casi[1], big.mark =
+                                                " ")))
   
   output$varCumCases <- renderUI(div(class = 'varText', paste0(
     ifelse(prettyNum(summary()$totale_casi[2], big.mark = " ") >= 0, "+", ""),
@@ -387,11 +387,13 @@ server <- function(input, output, session) {
     "%"
   )))
   
-  output$healedTitle <- renderText(paste(var_descrip[var_descrip$field_name ==
-                                                       'dimessi_guariti', "description"]))
+  output$healedTitle <-
+    renderText(paste(var_descrip[var_descrip$field_name ==
+                                   'dimessi_guariti', "description"]))
   
-  output$CumHealed <- renderUI(div(class = 'valText', prettyNum(summary()$dimessi_guariti[1], big.mark =
-                                                                  " ")))
+  output$CumHealed <-
+    renderUI(div(class = 'valText', prettyNum(summary()$dimessi_guariti[1], big.mark =
+                                                " ")))
   
   output$varCumHealed <- renderUI(div(class = 'varText', paste0(
     ifelse(
@@ -403,11 +405,13 @@ server <- function(input, output, session) {
     "%"
   )))
   
-  output$deathsTitle <- renderText(paste(var_descrip[var_descrip$field_name ==
-                                                       'deceduti', "description"]))
+  output$deathsTitle <-
+    renderText(paste(var_descrip[var_descrip$field_name ==
+                                   'deceduti', "description"]))
   
-  output$Deaths <- renderUI(div(class = 'valText', prettyNum(summary()$deceduti[1], big.mark =
-                                                               " ")))
+  output$Deaths <-
+    renderUI(div(class = 'valText', prettyNum(summary()$deceduti[1], big.mark =
+                                                " ")))
   
   output$varDeaths <- renderUI(div(class = 'varText', paste0(
     ifelse(prettyNum(summary()$deceduti[2], big.mark = " ") >= 0, "+", ""),
@@ -415,8 +419,9 @@ server <- function(input, output, session) {
     "%"
   )))
   
-  output$NewCases <- renderUI(div(class = 'valText', prettyNum(summary()$nuovi_positivi[1], big.mark =
-                                                                 " ")))
+  output$NewCases <-
+    renderUI(div(class = 'valText', prettyNum(summary()$nuovi_positivi[1], big.mark =
+                                                " ")))
   
   output$varNewCases <- renderUI(div(class = 'varText', paste0(
     ifelse(
@@ -442,11 +447,13 @@ server <- function(input, output, session) {
     "%"
   )))
   
-  output$swabsTitle <- renderText(paste(var_descrip[var_descrip$field_name ==
-                                                      'tamponi', "description"]))
+  output$swabsTitle <-
+    renderText(paste(var_descrip[var_descrip$field_name ==
+                                   'tamponi', "description"]))
   
-  output$Swabs <- renderUI(div(class = 'valText', prettyNum(summary()$tamponi[1], big.mark =
-                                                              " ")))
+  output$Swabs <-
+    renderUI(div(class = 'valText', prettyNum(summary()$tamponi[1], big.mark =
+                                                " ")))
   
   output$varSwabs <- renderUI(div(class = 'varText', paste0(
     ifelse(prettyNum(summary()$tamponi[2], big.mark = " ") >= 0, "+", ""),
@@ -454,8 +461,9 @@ server <- function(input, output, session) {
     "%"
   )))
   
-  output$CurrCases <- renderUI(div(class = 'valText', prettyNum(summary()$totale_positivi[1], big.mark =
-                                                                  " ")))
+  output$CurrCases <-
+    renderUI(div(class = 'valText', prettyNum(summary()$totale_positivi[1], big.mark =
+                                                " ")))
   
   output$varCurrCases <- renderUI(div(class = 'varText', paste0(
     ifelse(
@@ -527,8 +535,9 @@ server <- function(input, output, session) {
     "%"
   )))
   
-  output$TestedCases <- renderUI(div(class = 'valText', prettyNum(summary()$casi_testati[1], big.mark =
-                                                                    " ")))
+  output$TestedCases <-
+    renderUI(div(class = 'valText', prettyNum(summary()$casi_testati[1], big.mark =
+                                                " ")))
   
   output$varTestedCases <- renderUI(div(class = 'varText', paste0(
     ifelse(prettyNum(summary()$casi_testati[2], big.mark = " ") >= 0, "+", ""),
@@ -538,7 +547,6 @@ server <- function(input, output, session) {
   
   
   observeEvent(input$selectVar, {
-
     if (input$selectVar == 'nuovi_dimessi') {
       output$healedTitle <- renderText({
         paste(var_descrip[var_descrip$field_name == 'nuovi_dimessi', "description"])
@@ -561,7 +569,7 @@ server <- function(input, output, session) {
       
     }
     
-
+    
     if (input$selectVar == 'dimessi_guariti') {
       output$healedTitle <- renderText({
         paste(var_descrip[var_descrip$field_name == 'dimessi_guariti', "description"])
@@ -584,7 +592,7 @@ server <- function(input, output, session) {
       
     }
     
-
+    
     if (input$selectVar == 'nuovi_deceduti') {
       output$deathsTitle <- renderText({
         paste(var_descrip[var_descrip$field_name == 'nuovi_deceduti', "description"])
@@ -612,8 +620,9 @@ server <- function(input, output, session) {
         paste(var_descrip[var_descrip$field_name == 'deceduti', "description"])
       })
       
-      output$Deaths <- renderUI(div(class = 'valText', prettyNum(summary()$deceduti[1], big.mark =
-                                                                   " ")))
+      output$Deaths <-
+        renderUI(div(class = 'valText', prettyNum(summary()$deceduti[1], big.mark =
+                                                    " ")))
       
       output$varDeaths <- renderUI(div(class = 'varText', paste0(
         ifelse(prettyNum(summary()$deceduti[2], big.mark = " ") >= 0, "+", ""),
@@ -651,8 +660,9 @@ server <- function(input, output, session) {
         paste(var_descrip[var_descrip$field_name == 'tamponi', "description"])
       })
       
-      output$Swabs <- renderUI(div(class = 'valText', prettyNum(summary()$tamponi[1], big.mark =
-                                                                  " ")))
+      output$Swabs <-
+        renderUI(div(class = 'valText', prettyNum(summary()$tamponi[1], big.mark =
+                                                    " ")))
       
       output$varSwabs <- renderUI(div(class = 'varText', paste0(
         ifelse(prettyNum(summary()$tamponi[2], big.mark = " ") >= 0, "+", ""),
@@ -939,7 +949,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(event_data("plotly_doubleclick", "M"), {
-      sel_reg(regions)
+    sel_reg(regions)
   })
   
   
