@@ -7,6 +7,10 @@
   background-color:#222222
 }
 
+.sunburstlayer .slice .surface {
+    opacity: 0.7;
+}
+
 ul {
   color: white;
 }
