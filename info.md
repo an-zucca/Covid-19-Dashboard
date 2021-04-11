@@ -9,7 +9,8 @@ output: html_document
 
 ![](img/user_andrea.jpg)
 
-Andrea Zucca
+Andrea Zucca<br/>
+[Linkedin](https://www.linkedin.com/in/andrea-zucca-62b6a6174/)
 _____________________________________________________________________________________________________________________________________________________
 # L'App
 L'app, qui alla sua prima versione, rappresenta il progetto di fine corso in "Data visualization, data analytics, data modeling".<br/>
