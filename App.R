@@ -54,7 +54,7 @@ sidebar <- dashboardSidebar(sidebarMenu(
         "selectChartTypeCurrDistr",
         label = "Tipo grafico distribuzione:",
         choices = list("Sunbarst chart" = 'S', "Horizontal bar" = 'H'),
-        selected = 'S'
+        selected = 'H'
       ),
       selectInput(
         "selectChartTimeCurrDistr",
@@ -378,12 +378,30 @@ ui <- dashboardPage(skin = 'blue',
 
 server <- function(input, output, session) {
   output$CumCases <-
-    renderUI(div(class = 'valText', prettyNum(summary()$totale_casi[1], big.mark =
-                                                " ")))
+    renderUI(div(
+      class = 'valText',
+      prettyNum(
+        summary()$totale_casi[1],
+        big.mark = ".",
+        decimal.mark = ","
+      )
+    ))
   
   output$varCumCases <- renderUI(div(class = 'varText', paste0(
-    ifelse(prettyNum(summary()$totale_casi[2], big.mark = " ") >= 0, "+", ""),
-    prettyNum(summary()$totale_casi[2], big.mark = " "),
+    ifelse(
+      prettyNum(
+        summary()$totale_casi[2],
+        big.mark = ".",
+        decimal.mark = ","
+      ) >= 0,
+      "+",
+      ""
+    ),
+    prettyNum(
+      summary()$totale_casi[2],
+      big.mark = ".",
+      decimal.mark = ","
+    ),
     "%"
   )))
   
@@ -392,16 +410,30 @@ server <- function(input, output, session) {
                                    'dimessi_guariti', "description"]))
   
   output$CumHealed <-
-    renderUI(div(class = 'valText', prettyNum(summary()$dimessi_guariti[1], big.mark =
-                                                " ")))
+    renderUI(div(
+      class = 'valText',
+      prettyNum(
+        summary()$dimessi_guariti[1],
+        big.mark = ".",
+        decimal.mark = ","
+      )
+    ))
   
   output$varCumHealed <- renderUI(div(class = 'varText', paste0(
     ifelse(
-      prettyNum(summary()$dimessi_guariti[2], big.mark = " ") >= 0,
+      prettyNum(
+        summary()$dimessi_guariti[2],
+        big.mark = ".",
+        decimal.mark = ","
+      ) >= 0,
       "+",
       ""
     ),
-    prettyNum(summary()$dimessi_guariti[2], big.mark = " "),
+    prettyNum(
+      summary()$dimessi_guariti[2],
+      big.mark = ".",
+      decimal.mark = ","
+    ),
     "%"
   )))
   
@@ -410,40 +442,85 @@ server <- function(input, output, session) {
                                    'deceduti', "description"]))
   
   output$Deaths <-
-    renderUI(div(class = 'valText', prettyNum(summary()$deceduti[1], big.mark =
-                                                " ")))
+    renderUI(div(
+      class = 'valText',
+      prettyNum(
+        summary()$deceduti[1],
+        big.mark = ".",
+        decimal.mark = ","
+      )
+    ))
   
   output$varDeaths <- renderUI(div(class = 'varText', paste0(
-    ifelse(prettyNum(summary()$deceduti[2], big.mark = " ") >= 0, "+", ""),
-    prettyNum(summary()$deceduti[2], big.mark = " "),
+    ifelse(
+      prettyNum(
+        summary()$deceduti[2],
+        big.mark = ".",
+        decimal.mark = ","
+      ) >= 0,
+      "+",
+      ""
+    ),
+    prettyNum(
+      summary()$deceduti[2],
+      big.mark = ".",
+      decimal.mark = ","
+    ),
     "%"
   )))
   
   output$NewCases <-
-    renderUI(div(class = 'valText', prettyNum(summary()$nuovi_positivi[1], big.mark =
-                                                " ")))
+    renderUI(div(
+      class = 'valText',
+      prettyNum(
+        summary()$nuovi_positivi[1],
+        big.mark = ".",
+        decimal.mark = ","
+      )
+    ))
   
   output$varNewCases <- renderUI(div(class = 'varText', paste0(
     ifelse(
-      prettyNum(summary()$nuovi_positivi[2], big.mark = " ") >= 0,
+      prettyNum(
+        summary()$nuovi_positivi[2],
+        big.mark = ".",
+        decimal.mark = ","
+      ) >= 0,
       "+",
       ""
     ),
-    prettyNum(summary()$nuovi_positivi[2], big.mark = " "),
+    prettyNum(
+      summary()$nuovi_positivi[2],
+      big.mark = ".",
+      decimal.mark = ","
+    ),
     "%"
   )))
   
   output$LethRate <- renderUI(div(class = 'valText', paste0(
-    prettyNum(summary()$tasso_letalita[1], big.mark = " "), '%'
+    prettyNum(
+      summary()$tasso_letalita[1],
+      big.mark = ".",
+      decimal.mark = ","
+    ),
+    '%'
   )))
   
   output$varLethRate <- renderUI(div(class = 'varText', paste0(
     ifelse(
-      prettyNum(summary()$tasso_letalita[2], big.mark = " ") >= 0,
+      prettyNum(
+        summary()$tasso_letalita[2],
+        big.mark = ".",
+        decimal.mark = ","
+      ) >= 0,
       "+",
       ""
     ),
-    prettyNum(summary()$tasso_letalita[2], big.mark = " "),
+    prettyNum(
+      summary()$tasso_letalita[2],
+      big.mark = ".",
+      decimal.mark = ","
+    ),
     "%"
   )))
   
@@ -452,96 +529,190 @@ server <- function(input, output, session) {
                                    'tamponi', "description"]))
   
   output$Swabs <-
-    renderUI(div(class = 'valText', prettyNum(summary()$tamponi[1], big.mark =
-                                                " ")))
+    renderUI(div(
+      class = 'valText',
+      prettyNum(
+        summary()$tamponi[1],
+        big.mark = ".",
+        decimal.mark = ","
+      )
+    ))
   
   output$varSwabs <- renderUI(div(class = 'varText', paste0(
-    ifelse(prettyNum(summary()$tamponi[2], big.mark = " ") >= 0, "+", ""),
+    ifelse(
+      prettyNum(
+        summary()$tamponi[2],
+        big.mark = ".",
+        decimal.mark = ","
+      ) >= 0,
+      "+",
+      ""
+    ),
     prettyNum(summary()$tamponi[2], big.mark = " "),
     "%"
   )))
   
   output$CurrCases <-
-    renderUI(div(class = 'valText', prettyNum(summary()$totale_positivi[1], big.mark =
-                                                " ")))
+    renderUI(div(
+      class = 'valText',
+      prettyNum(
+        summary()$totale_positivi[1],
+        big.mark = ".",
+        decimal.mark = ","
+      )
+    ))
   
   output$varCurrCases <- renderUI(div(class = 'varText', paste0(
     ifelse(
-      prettyNum(summary()$totale_positivi[2], big.mark = " ") >= 0,
+      prettyNum(
+        summary()$totale_positivi[2],
+        big.mark = ".",
+        decimal.mark = ","
+      ) >= 0,
       "+",
       ""
     ),
-    prettyNum(summary()$totale_positivi[2], big.mark = " "),
+    prettyNum(
+      summary()$totale_positivi[2],
+      big.mark = ".",
+      decimal.mark = ","
+    ),
     "%"
   )))
   
   output$CurrHomeIs <- renderUI(div(
     class = 'valText',
-    prettyNum(summary()$isolamento_domiciliare[1], big.mark = " ")
+    prettyNum(
+      summary()$isolamento_domiciliare[1],
+      big.mark = ".",
+      decimal.mark = ","
+    )
   ))
   
   output$varCurrHomeIs <- renderUI(div(class = 'varText', paste0(
     ifelse(
-      prettyNum(summary()$isolamento_domiciliare[2], big.mark = " ") >= 0,
+      prettyNum(
+        summary()$isolamento_domiciliare[2],
+        big.mark = ".",
+        decimal.mark = ","
+      ) >= 0,
       "+",
       ""
     ),
-    prettyNum(summary()$isolamento_domiciliare[2], big.mark = " "),
+    prettyNum(
+      summary()$isolamento_domiciliare[2],
+      big.mark = ".",
+      decimal.mark = ","
+    ),
     "%"
   )))
   
   output$CurrHospSympt <- renderUI(div(
     class = 'valText',
-    prettyNum(summary()$ricoverati_con_sintomi[1], big.mark = " ")
+    prettyNum(
+      summary()$ricoverati_con_sintomi[1],
+      big.mark = ".",
+      decimal.mark = ","
+    )
   ))
   
   output$varCurrHospSympt <- renderUI(div(class = 'varText', paste0(
     ifelse(
-      prettyNum(summary()$ricoverati_con_sintomi[2], big.mark = " ") >= 0,
+      prettyNum(
+        summary()$ricoverati_con_sintomi[2],
+        big.mark = ".",
+        decimal.mark = ","
+      ) >= 0,
       "+",
       ""
     ),
-    prettyNum(summary()$ricoverati_con_sintomi[2], big.mark = " "),
+    prettyNum(
+      summary()$ricoverati_con_sintomi[2],
+      big.mark = ".",
+      decimal.mark = ","
+    ),
     "%"
   )))
   
   output$CurrIntCare <- renderUI(div(
     class = 'valText',
-    prettyNum(summary()$terapia_intensiva[1], big.mark = " ")
+    prettyNum(
+      summary()$terapia_intensiva[1],
+      big.mark = ".",
+      decimal.mark = ","
+    )
   ))
   
   output$varCurrIntCare <- renderUI(div(class = 'varText', paste0(
     ifelse(
-      prettyNum(summary()$terapia_intensiva[2], big.mark = " ") >= 0,
+      prettyNum(
+        summary()$terapia_intensiva[2],
+        big.mark = ".",
+        decimal.mark = ","
+      ) >= 0,
       "+",
       ""
     ),
-    prettyNum(summary()$terapia_intensiva[2], big.mark = " "),
+    prettyNum(
+      summary()$terapia_intensiva[2],
+      big.mark = ".",
+      decimal.mark = ","
+    ),
     "%"
   )))
   
   output$CurrHosp <- renderUI(div(
     class = 'valText',
-    prettyNum(summary()$totale_ospedalizzati[1], big.mark = " ")
+    prettyNum(
+      summary()$totale_ospedalizzati[1],
+      big.mark = ".",
+      decimal.mark = ","
+    )
   ))
   
   output$varCurrHosp <- renderUI(div(class = 'varText', paste0(
     ifelse(
-      prettyNum(summary()$totale_ospedalizzati[2], big.mark = " ") >= 0,
+      prettyNum(
+        summary()$totale_ospedalizzati[2],
+        big.mark = ".",
+        decimal.mark = ","
+      ) >= 0,
       "+",
       ""
     ),
-    prettyNum(summary()$totale_ospedalizzati[2], big.mark = " "),
+    prettyNum(
+      summary()$totale_ospedalizzati[2],
+      big.mark = ".",
+      decimal.mark = ","
+    ),
     "%"
   )))
   
   output$TestedCases <-
-    renderUI(div(class = 'valText', prettyNum(summary()$casi_testati[1], big.mark =
-                                                " ")))
+    renderUI(div(
+      class = 'valText',
+      prettyNum(
+        summary()$casi_testati[1],
+        big.mark = ".",
+        decimal.mark = ","
+      )
+    ))
   
   output$varTestedCases <- renderUI(div(class = 'varText', paste0(
-    ifelse(prettyNum(summary()$casi_testati[2], big.mark = " ") >= 0, "+", ""),
-    prettyNum(summary()$casi_testati[2], big.mark = " "),
+    ifelse(
+      prettyNum(
+        summary()$casi_testati[2],
+        big.mark = ".",
+        decimal.mark = ","
+      ) >= 0,
+      "+",
+      ""
+    ),
+    prettyNum(
+      summary()$casi_testati[2],
+      big.mark = ".",
+      decimal.mark = ","
+    ),
     "%"
   )))
   
@@ -554,16 +725,28 @@ server <- function(input, output, session) {
       
       output$CumHealed <- renderUI(div(
         class = 'valText',
-        prettyNum(summary()$nuovi_dimessi[1], big.mark = " ")
+        prettyNum(
+          summary()$nuovi_dimessi[1],
+          big.mark = ".",
+          decimal.mark = ","
+        )
       ))
       
       output$varCumHealed <- renderUI(div(class = 'varText', paste0(
         ifelse(
-          prettyNum(summary()$nuovi_dimessi[2], big.mark = " ") >= 0,
+          prettyNum(
+            summary()$nuovi_dimessi[2],
+            big.mark = ".",
+            decimal.mark = ","
+          ) >= 0,
           "+",
           ""
         ),
-        prettyNum(summary()$nuovi_dimessi[2], big.mark = " "),
+        prettyNum(
+          summary()$nuovi_dimessi[2],
+          big.mark = ".",
+          decimal.mark = ","
+        ),
         "%"
       )))
       
@@ -577,16 +760,28 @@ server <- function(input, output, session) {
       
       output$CumHealed <- renderUI(div(
         class = 'valText',
-        prettyNum(summary()$dimessi_guariti[1], big.mark = " ")
+        prettyNum(
+          summary()$dimessi_guariti[1],
+          big.mark = ".",
+          decimal.mark = ","
+        )
       ))
       
       output$varCumHealed <- renderUI(div(class = 'varText', paste0(
         ifelse(
-          prettyNum(summary()$dimessi_guariti[2], big.mark = " ") >= 0,
+          prettyNum(
+            summary()$dimessi_guariti[2],
+            big.mark = ".",
+            decimal.mark = ","
+          ) >= 0,
           "+",
           ""
         ),
-        prettyNum(summary()$dimessi_guariti[2], big.mark = " "),
+        prettyNum(
+          summary()$dimessi_guariti[2],
+          big.mark = ".",
+          decimal.mark = ","
+        ),
         "%"
       )))
       
@@ -600,16 +795,28 @@ server <- function(input, output, session) {
       
       output$Deaths <- renderUI(div(
         class = 'valText',
-        prettyNum(summary()$nuovi_deceduti[1], big.mark = " ")
+        prettyNum(
+          summary()$nuovi_deceduti[1],
+          big.mark = ".",
+          decimal.mark = ","
+        )
       ))
       
       output$varDeaths <- renderUI(div(class = 'varText', paste0(
         ifelse(
-          prettyNum(summary()$nuovi_deceduti[2], big.mark = " ") >= 0,
+          prettyNum(
+            summary()$nuovi_deceduti[2],
+            big.mark = ".",
+            decimal.mark = ","
+          ) >= 0,
           "+",
           ""
         ),
-        prettyNum(summary()$nuovi_deceduti[2], big.mark = " "),
+        prettyNum(
+          summary()$nuovi_deceduti[2],
+          big.mark = ".",
+          decimal.mark = ","
+        ),
         "%"
       )))
       
@@ -621,12 +828,30 @@ server <- function(input, output, session) {
       })
       
       output$Deaths <-
-        renderUI(div(class = 'valText', prettyNum(summary()$deceduti[1], big.mark =
-                                                    " ")))
+        renderUI(div(
+          class = 'valText',
+          prettyNum(
+            summary()$deceduti[1],
+            big.mark = ".",
+            decimal.mark = ","
+          )
+        ))
       
       output$varDeaths <- renderUI(div(class = 'varText', paste0(
-        ifelse(prettyNum(summary()$deceduti[2], big.mark = " ") >= 0, "+", ""),
-        prettyNum(summary()$deceduti[2], big.mark = " "),
+        ifelse(
+          prettyNum(
+            summary()$deceduti[2],
+            big.mark = ".",
+            decimal.mark = ","
+          ) >= 0,
+          "+",
+          ""
+        ),
+        prettyNum(
+          summary()$deceduti[2],
+          big.mark = ".",
+          decimal.mark = ","
+        ),
         "%"
       )))
       
@@ -640,16 +865,28 @@ server <- function(input, output, session) {
       
       output$Swabs <- renderUI(div(
         class = 'valText',
-        prettyNum(summary()$nuovi_tamponi[1], big.mark = " ")
+        prettyNum(
+          summary()$nuovi_tamponi[1],
+          big.mark = ".",
+          decimal.mark = ","
+        )
       ))
       
       output$varSwabs <- renderUI(div(class = 'varText', paste0(
         ifelse(
-          prettyNum(summary()$nuovi_tamponi[2], big.mark = " ") >= 0,
+          prettyNum(
+            summary()$nuovi_tamponi[2],
+            big.mark = ".",
+            decimal.mark = ","
+          ) >= 0,
           "+",
           ""
         ),
-        prettyNum(summary()$nuovi_tamponi[2], big.mark = " "),
+        prettyNum(
+          summary()$nuovi_tamponi[2],
+          big.mark = ".",
+          decimal.mark = ","
+        ),
         "%"
       )))
       
@@ -661,12 +898,30 @@ server <- function(input, output, session) {
       })
       
       output$Swabs <-
-        renderUI(div(class = 'valText', prettyNum(summary()$tamponi[1], big.mark =
-                                                    " ")))
+        renderUI(div(
+          class = 'valText',
+          prettyNum(
+            summary()$tamponi[1],
+            big.mark = ".",
+            decimal.mark = ","
+          )
+        ))
       
       output$varSwabs <- renderUI(div(class = 'varText', paste0(
-        ifelse(prettyNum(summary()$tamponi[2], big.mark = " ") >= 0, "+", ""),
-        prettyNum(summary()$tamponi[2], big.mark = " "),
+        ifelse(
+          prettyNum(
+            summary()$tamponi[2],
+            big.mark = ".",
+            decimal.mark = ","
+          ) >= 0,
+          "+",
+          ""
+        ),
+        prettyNum(
+          summary()$tamponi[2],
+          big.mark = ".",
+          decimal.mark = ","
+        ),
         "%"
       )))
       
@@ -678,16 +933,29 @@ server <- function(input, output, session) {
       })
       
       output$Swabs <- renderUI(div(class = 'valText', paste0(
-        prettyNum(summary()$pos_tamponi[1], big.mark = " "), "%"
+        prettyNum(
+          summary()$pos_tamponi[1],
+          big.mark = ".",
+          decimal.mark = ","
+        ),
+        "%"
       )))
       
       output$varSwabs <- renderUI(div(class = 'varText', paste0(
         ifelse(
-          prettyNum(summary()$pos_tamponi[2], big.mark = " ") >= 0,
+          prettyNum(
+            summary()$pos_tamponi[2],
+            big.mark = ".",
+            decimal.mark = ","
+          ) >= 0,
           "+",
           ""
         ),
-        prettyNum(summary()$pos_tamponi[2], big.mark = " "),
+        prettyNum(
+          summary()$pos_tamponi[2],
+          big.mark = ".",
+          decimal.mark = ","
+        ),
         "%"
       )))
       
@@ -713,11 +981,7 @@ server <- function(input, output, session) {
   
   output$titleCumCasesDistr <-
     renderText({
-      ifelse(
-        input$selectChartTypeCurrDistr == 'S',
-        'Distribuzione totale casi',
-        'Deceduti / Dimessi-Guariti / Attuali positivi'
-      )
+      'Distribuzione totale casi'
     })
   
   output$CurrPosDistr <- renderPlotly({
@@ -733,11 +997,7 @@ server <- function(input, output, session) {
   
   output$title2 <-
     renderText({
-      ifelse(
-        input$selectChartTypeCurrDistr == 'S',
-        'Distribuzione attuali positivi',
-        'Terapia int. / Isol. domiciliare / Ricoverati'
-      )
+      'Distribuzione attuali positivi'
     })
   
   
