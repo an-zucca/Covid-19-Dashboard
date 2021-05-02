@@ -1,5 +1,7 @@
 
 
+
+
 var_descrip <- data.frame(
   field_name = c(
     "totale_casi",
@@ -620,7 +622,8 @@ draw_time_series_plot <-
             xvalue = summary[summary$denominazione_regione == reg, ]$data
             
             subSum <-
-              summary %>% filter(data == date & denominazione_regione == reg)
+              summary %>% filter(data == date &
+                                   denominazione_regione == reg)
             num_abitanti <- subSum$num_abitanti
             
             yvalue = summary[summary$denominazione_regione == reg, ][[var]] /
@@ -760,37 +763,6 @@ draw_time_series_plot <-
 
 
 
-
-draw_sel_map <- function(data, selRegions) {
-  m <- list(l = 20,
-            r = 20,
-            b = 10,
-            t = 10)
-  
-  cols <- ifelse(data$DEN_REG %in% selRegions, "#00ff00", '#222222')
-  
-  plot_ly(
-    data,
-    alpha = 1,
-    color = ~ DEN_REG,
-    colors = cols,
-    stroke = I("#666666"),
-    span = I(1),
-    key = ~ DEN_REG,
-    source = 'M'
-  ) %>%
-    layout(
-      plot_bgcolor = '#222d32',
-      paper_bgcolor = '#222d32',
-      showlegend = F,
-      margin = m
-    ) %>%
-    config(displayModeBar = FALSE)
-  
-}
-
-
-
 draw_map <-
   function(datasf,
            data,
@@ -808,8 +780,9 @@ draw_map <-
       summary <-
         summary[, c("denominazione_regione", var, 'num_abitanti')]
       
-      summary <- summary %>% mutate(num_abitanti_n = num_abitanti / numCasi,
-                                    var2 = get(var) / num_abitanti_n) %>% select(-num_abitanti_n)
+      summary <-
+        summary %>% mutate(num_abitanti_n = num_abitanti / numCasi,
+                           var2 = get(var) / num_abitanti_n) %>% select(-num_abitanti_n)
       
       summary <- summary[, c("denominazione_regione", 'var2')]
       colnames(summary) <- c("denominazione_regione", var)
@@ -909,9 +882,6 @@ draw_map <-
             t = 10
           )
         )
-      
-      
-      
     }
   }
 

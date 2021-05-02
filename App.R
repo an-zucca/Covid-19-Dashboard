@@ -1036,7 +1036,54 @@ server <- function(input, output, session) {
   })
   
   output$selMap <- renderPlotly({
-    draw_sel_map(data = sf_reg(), selRegions = sel_reg())
+    m <- list(l = 20,
+              r = 20,
+              b = 10,
+              t = 10)
+    
+    
+    cols <-
+      c(
+        "#00ff00",
+        "#00ff00",
+        "#00ff00",
+        "#00ff00",
+        "#00ff00",
+        "#00ff00",
+        "#00ff00",
+        "#00ff00",
+        "#00ff00",
+        "#00ff00",
+        "#00ff00",
+        "#00ff00",
+        "#00ff00",
+        "#00ff00",
+        "#00ff00",
+        "#00ff00",
+        "#00ff00",
+        "#00ff00",
+        "#00ff00",
+        "#00ff00"
+      )
+    
+    plot_ly(
+      sf_reg(),
+      alpha = 1,
+      color = ~ DEN_REG,
+      colors = cols,
+      stroke = I("#666666"),
+      span = I(1),
+      key = ~ DEN_REG,
+      source = 'M'
+    ) %>%
+      layout(
+        plot_bgcolor = '#222d32',
+        paper_bgcolor = '#222d32',
+        showlegend = F,
+        margin = m
+      ) %>%
+      config(displayModeBar = FALSE)
+    
   })
   
   sel_reg <- reactiveVal(regions)
@@ -1206,10 +1253,24 @@ server <- function(input, output, session) {
       sel_reg(unique(c(sel_reg(), reg)))
     }
     
+    cols <-
+      ifelse(sf_reg()$DEN_REG %in% sel_reg(), "#00ff00", '#222222')
+    
+    plotlyProxy("selMap", session) %>%
+      plotlyProxyInvoke("restyle", list(fillcolor = cols))
+    
   })
+  
   
   observeEvent(event_data("plotly_doubleclick", "M"), {
     sel_reg(regions)
+    
+    cols <-
+      ifelse(sf_reg()$DEN_REG %in% sel_reg(), "#00ff00", '#00ff00')
+    
+    plotlyProxy("selMap", session) %>%
+      plotlyProxyInvoke("restyle", list(fillcolor = cols))
+    
   })
   
   
@@ -1279,6 +1340,7 @@ server <- function(input, output, session) {
         changeTxtColor('TestedCases', var_descrip[var_descrip$field_name == 'casi_testati', "field_color"])
       }
     )
+    
     
   })
   

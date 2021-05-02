@@ -38,9 +38,6 @@ Il codice per generare l'app è reso [qui](https://github.com/zuccaandrea/Covid1
 _____________________________________________________________________________________________________________________________________________________
 
 # Criticità e sviluppi futuri
-* La mappa per selezionare le regioni viene ricaricata ogni volta che l'utente seleziona o deseleziona una regione <br/> 
-*Problema risolvibile via JavaScript*
 * Con il passare dei mesi, all'aumentare dei dati, lo spazio disponibile per la visualizzazione delle serie storiche potrebbe non essere sufficiente a una analisi visiva agile delle curve <br/>
 *Nonostante Plotly consenta di evidenziare porzioni di un grafico, può essere utile prevedere una visualizzazione a schermo intero degli stessi*
 * L'uso dei colori verde e rosso può aiutare a interpretare se un incremento o decremento, rispetto al giorno precedente, di una variabile del sommario, è un dato positivo o negativo nella lotta alla pandemia.
-* Implementare supporto multilingua.
