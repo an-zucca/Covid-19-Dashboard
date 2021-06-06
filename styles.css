@@ -166,5 +166,24 @@ p {
     color: #222 !important;
 }
 
+#infoMap {
+  margin-top: 0px;
+  font-size:11px;
+}
+
+.sidebar .irs-grid-text {
+  color: #99a4ac;
+}
+
+.sidebar .irs-grid-pol {
+  opacity: 0.5;
+  background-color: #428bca;
+}
+
+.sidebar .irs-min,
+.sidebar .irs-max {
+  color: #aaa;
+}
+
 
 

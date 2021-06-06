@@ -1,7 +1,3 @@
-
-
-
-
 var_descrip <- data.frame(
   field_name = c(
     "totale_casi",
@@ -60,7 +56,6 @@ var_descrip <- data.frame(
   stringsAsFactors = FALSE
 )
 
-
 regions <-
   list(
     "Abruzzo",
@@ -94,7 +89,7 @@ load_dati_reg <- function(path) {
   dati_reg <- dati_reg %>%
     select(-lat,-long,-variazione_totale_positivi,-note) %>%
     mutate(
-      data = as.Date(strptime(data, format = "%Y-%m-%dT%H:%M:%S", tz = 'UTC')),
+      data = as.Date(strptime(data, format = "%Y-%m-%d", tz = 'UTC')),
       denominazione_regione = ifelse(
         denominazione_regione %in% c("P.A. Bolzano", "P.A. Trento"),
         "Trentino-Alto Adige",
@@ -813,7 +808,7 @@ draw_map <-
           color = ~ get(var),
           alpha = 1,
           colors = detPal,
-          stroke = I("black"),
+          stroke = I("#666666"),
           text = ~ paste0(DEN_REG, "\n", round(get(var), 2)),
           hoveron = "fills",
           hoverinfo = "text",
@@ -823,6 +818,8 @@ draw_map <-
         layout(
           plot_bgcolor = 'rgb(34,34,34)',
           paper_bgcolor = 'rgb(34,34,34)',
+          xaxis = list(fixedrange = TRUE),
+          yaxis = list(fixedrange = TRUE),
           margin = list(
             l = 20,
             r = 20,
@@ -865,8 +862,8 @@ draw_map <-
           color = ~ get(var),
           alpha = 1,
           colors = detPal,
-          stroke = I("black"),
-          text = ~ paste0(DEN_REG, "\n", get(var)),
+          stroke = I("#666666"),
+          text = ~ paste0(DEN_REG, "\n", round(get(var), 2)),
           hoveron = "fills",
           hoverinfo = "text",
           showlegend = F
@@ -875,6 +872,8 @@ draw_map <-
         layout(
           plot_bgcolor = 'rgb(34,34,34)',
           paper_bgcolor = 'rgb(34,34,34)',
+          xaxis = list(fixedrange = TRUE),
+          yaxis = list(fixedrange = TRUE),
           margin = list(
             l = 20,
             r = 20,

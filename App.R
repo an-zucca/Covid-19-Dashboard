@@ -28,11 +28,15 @@ sidebar <- dashboardSidebar(sidebarMenu(
       uiOutput(outputId = "selRefDate"),
       tags$div(
         class = "form-group shiny-input-container",
-        tags$label("Seleziona regioni:"),
+        tags$label(id = 'labelSelezionaRegioni', "Seleziona regioni:"),
         withSpinner(
           plotlyOutput(outputId = "selMap", height = 300),
           type = 4,
           size = 0.6
+        ),
+        tags$label(
+          id = 'infoMap',
+          '(*) doppio clic su un\'area vuota della mappa per selezionare tutte le regioni'
         )
       ),
       selectInput(
@@ -1041,7 +1045,6 @@ server <- function(input, output, session) {
               b = 10,
               t = 10)
     
-    
     cols <-
       c(
         "#00ff00",
@@ -1080,7 +1083,9 @@ server <- function(input, output, session) {
         plot_bgcolor = '#222d32',
         paper_bgcolor = '#222d32',
         showlegend = F,
-        margin = m
+        margin = m,
+        xaxis = list(fixedrange = TRUE),
+        yaxis = list(fixedrange = TRUE)
       ) %>%
       config(displayModeBar = FALSE)
     
@@ -1247,10 +1252,15 @@ server <- function(input, output, session) {
   observeEvent(event_data("plotly_click", "M", priority = "event"), {
     reg <- event_data("plotly_click", "M")$key
     
-    if (reg %in% sel_reg() && length(sel_reg()) > 1) {
-      sel_reg(sel_reg()[!(sel_reg() %in% reg)])
+    if (length(sel_reg()) == 20) {
+      sel_reg(reg)
     } else {
-      sel_reg(unique(c(sel_reg(), reg)))
+      if (reg %in% sel_reg() && length(sel_reg()) > 1) {
+        sel_reg(sel_reg()[!(sel_reg() %in% reg)])
+      }
+      else {
+        sel_reg(unique(c(sel_reg(), reg)))
+      }
     }
     
     cols <-
