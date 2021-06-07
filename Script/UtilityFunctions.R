@@ -809,7 +809,7 @@ draw_map <-
           alpha = 1,
           colors = detPal,
           stroke = I("#666666"),
-          text = ~ paste0(DEN_REG, "\n", round(get(var), 2)),
+          text =  ~ paste0(DEN_REG, "\n", format(round(get(var), 2), decimal.mark=",",big.mark=".",small.mark=".")),
           hoveron = "fills",
           hoverinfo = "text",
           showlegend = F
@@ -863,7 +863,7 @@ draw_map <-
           alpha = 1,
           colors = detPal,
           stroke = I("#666666"),
-          text = ~ paste0(DEN_REG, "\n", round(get(var), 2)),
+          text =  ~ paste0(DEN_REG, "\n", format(round(get(var), 2), decimal.mark=",",big.mark=".",small.mark=".")),
           hoveron = "fills",
           hoverinfo = "text",
           showlegend = F
