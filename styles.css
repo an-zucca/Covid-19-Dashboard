@@ -7,6 +7,14 @@
   background-color:#222222
 }
 
+.modebar-group {
+  background: rgba(0,0,0,0) !important;
+}
+
+.modebar--hover > :not(.watermark) {
+  background: rgba(0,0,0,0) !important;
+}
+
 .sunburstlayer .slice .surface {
     opacity: 0.7;
 }
@@ -115,8 +123,6 @@ p {
 .varText {
   font-size:20px;
 }
-
-
 
 #deTable {
   color: white;
