@@ -1,10 +1,8 @@
 require(shinydashboard)
 require(tidyverse)
 require(shiny)
-require(shinythemes)
 require(plotly)
 require(sf)
-require(shinyWidgets)
 require(shinycssloaders)
 require(dplyr)
 require(DT)
@@ -1149,12 +1147,13 @@ server <- function(input, output, session) {
   
   output$selRefDate <- renderUI({
     req(dati_reg_add())
-    sliderInput(
-      inputId = "selRefDate",
-      label = "Data di riferimento:",
+    dateInput(
+      inputId = 'selRefDate',
+      label = 'Data di riferimento:',
       min = min(dati_reg_add()$data),
       max = max(dati_reg_add()$data),
-      value = max(dati_reg_add()$data)
+      value = max(dati_reg_add()$data),
+      language = 'it'
     )
   })
   

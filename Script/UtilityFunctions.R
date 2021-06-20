@@ -413,7 +413,7 @@ draw_distr_chart <-
       ) %>%
         layout(
           showlegend = T,
-          paper_bgcolor = 'rgba(34,34,34,1)',
+          paper_bgcolor = 'rgba(0,0,0,0)',
           margin = list(
             l = 30,
             r = 30,
@@ -474,7 +474,7 @@ draw_distr_chart <-
         x = f2$xx,
         y = f2$yy + max(y_sav) / 10,
         text = paste(round(f2$pp * 100, 3), '%'),
-        font = list(color =  f2$cc),
+        font = list(color = f2$cc),
         showarrow = FALSE
       )
       
@@ -489,10 +489,20 @@ draw_distr_chart <-
       )
       
       fig %>% layout(
-        xaxis = list(title = '', tickangle = 45),
-        yaxis = list(title = ''),
-        plot_bgcolor = 'rgb(34,34,34)',
-        paper_bgcolor = 'rgb(34,34,34)',
+        xaxis = list(
+          title = '',
+          showgrid = FALSE,
+          tickangle = 45
+        ),
+        yaxis = list(
+          title = '',
+          showgrid = TRUE,
+          gridcolor = 'rgb(40,40,40)',
+          tickcolor = 'rgb(40,40,40)',
+          tickwidth = 0.1
+        ),
+        plot_bgcolor = 'rgba(0,0,0,0)',
+        paper_bgcolor = 'rgba(0,0,0,0)',
         font = list(color = 'white'),
         legend = list(x = 0, y = 1)
       )
@@ -540,11 +550,16 @@ draw_distr_time_chart <-
                   name = var_descrip[var_descrip$field_name == var[3], "description"],
                   color = I(var_descrip[var_descrip$field_name == var[3], "field_color"])) %>%
         layout(
-          xaxis = list(title = ""),
-          yaxis = list(title = ''),
+          xaxis = list(title = '', showgrid = FALSE),
+          yaxis = list(
+            title = '',
+            showgrid = TRUE,
+            gridcolor = 'rgb(40,40,40)',
+            tickcolor = 'rgb(40,40,40)'
+          ),
           barmode = 'stack',
-          plot_bgcolor = 'rgb(34,34,34)',
-          paper_bgcolor = 'rgb(34,34,34)',
+          plot_bgcolor = 'rgba(0,0,0,0)',
+          paper_bgcolor = 'rgba(0,0,0,0)',
           font = list(color = 'white'),
           legend = list(x = 0, y = 1)
         )
@@ -584,10 +599,15 @@ draw_distr_time_chart <-
           fillcolor = toRGB(var_descrip[var_descrip$field_name == var[3], "field_color"], alpha = 0.05)
         ) %>%
         layout(
-          xaxis = list(title = ""),
-          yaxis = list(title = ''),
-          plot_bgcolor = 'rgb(34,34,34)',
-          paper_bgcolor = 'rgb(34,34,34)',
+          xaxis = list(title = '', showgrid = FALSE),
+          yaxis = list(
+            title = '',
+            showgrid = TRUE,
+            gridcolor = 'rgb(40,40,40)',
+            tickcolor = 'rgb(40,40,40)'
+          ),
+          plot_bgcolor = 'rgba(0,0,0,0)',
+          paper_bgcolor = 'rgba(0,0,0,0)',
           font = list(color = 'white'),
           legend = list(x = 0, y = 1)
         )
@@ -637,11 +657,16 @@ draw_time_series_plot <-
           
           p %>%
             layout(
-              xaxis = list(title = ""),
+              xaxis = list(title = '', showgrid = FALSE),
+              yaxis = list(
+                title = '',
+                showgrid = TRUE,
+                gridcolor = 'rgb(40,40,40)',
+                tickcolor = 'rgb(40,40,40)'
+              ),
               showlegend = T,
-              yaxis = list(title = ''),
-              plot_bgcolor = 'rgb(34,34,34)',
-              paper_bgcolor = 'rgb(34,34,34)',
+              plot_bgcolor = 'rgba(0,0,0,0)',
+              paper_bgcolor = 'rgba(0,0,0,0)',
               font = list(color = 'white')
             )
           
@@ -664,11 +689,16 @@ draw_time_series_plot <-
         
         p %>%
           layout(
-            xaxis = list(title = ""),
+            xaxis = list(title = '', showgrid = FALSE),
+            yaxis = list(
+              title = '',
+              showgrid = TRUE,
+              gridcolor = 'rgb(40,40,40)',
+              tickcolor = 'rgb(40,40,40)'
+            ),
             showlegend = T,
-            yaxis = list(title = ''),
-            plot_bgcolor = 'rgb(34,34,34)',
-            paper_bgcolor = 'rgb(34,34,34)',
+            plot_bgcolor = 'rgba(0,0,0,0)',
+            paper_bgcolor = 'rgba(0,0,0,0)',
             font = list(color = 'white')
           )
         
@@ -696,11 +726,16 @@ draw_time_series_plot <-
               name = var
             )  %>%
             layout(
-              xaxis = list(title = ""),
+              xaxis = list(title = '', showgrid = FALSE),
+              yaxis = list(
+                title = '',
+                showgrid = TRUE,
+                gridcolor = 'rgb(40,40,40)',
+                tickcolor = 'rgb(40,40,40)'
+              ),
               showlegend = F,
-              yaxis = list(title = ''),
-              plot_bgcolor = 'rgb(34,34,34)',
-              paper_bgcolor = 'rgb(34,34,34)',
+              plot_bgcolor = 'rgba(0,0,0,0)',
+              paper_bgcolor = 'rgba(0,0,0,0)',
               font = list(color = 'white'),
               legend = list(x = 0, y = 1)
             )
@@ -744,11 +779,16 @@ draw_time_series_plot <-
             name = var
           )  %>%
           layout(
-            xaxis = list(title = ""),
+            xaxis = list(title = '', showgrid = FALSE),
+            yaxis = list(
+              title = '',
+              showgrid = TRUE,
+              gridcolor = 'rgb(40,40,40)',
+              tickcolor = 'rgb(40,40,40)'
+            ),
             showlegend = F,
-            yaxis = list(title = ''),
-            plot_bgcolor = 'rgb(34,34,34)',
-            paper_bgcolor = 'rgb(34,34,34)',
+            plot_bgcolor = 'rgba(0,0,0,0)',
+            paper_bgcolor = 'rgba(0,0,0,0)',
             font = list(color = 'white'),
             legend = list(x = 0, y = 1)
           )
@@ -809,15 +849,24 @@ draw_map <-
           alpha = 1,
           colors = detPal,
           stroke = I("#666666"),
-          text =  ~ paste0(DEN_REG, "\n", format(round(get(var), 2), decimal.mark=",",big.mark=".",small.mark=".")),
+          text =  ~ paste0(
+            DEN_REG,
+            "\n",
+            format(
+              round(get(var), 2),
+              decimal.mark = ",",
+              big.mark = ".",
+              small.mark = "."
+            )
+          ),
           hoveron = "fills",
           hoverinfo = "text",
           showlegend = F
         ) %>%
         colorbar(title = '', tickfont = list(color = '#FFFFFF')) %>%
         layout(
-          plot_bgcolor = 'rgb(34,34,34)',
-          paper_bgcolor = 'rgb(34,34,34)',
+          plot_bgcolor = 'rgba(0,0,0,0)',
+          paper_bgcolor = 'rgba(0,0,0,0)',
           xaxis = list(fixedrange = TRUE),
           yaxis = list(fixedrange = TRUE),
           margin = list(
@@ -863,15 +912,24 @@ draw_map <-
           alpha = 1,
           colors = detPal,
           stroke = I("#666666"),
-          text =  ~ paste0(DEN_REG, "\n", format(round(get(var), 2), decimal.mark=",",big.mark=".",small.mark=".")),
+          text =  ~ paste0(
+            DEN_REG,
+            "\n",
+            format(
+              round(get(var), 2),
+              decimal.mark = ",",
+              big.mark = ".",
+              small.mark = "."
+            )
+          ),
           hoveron = "fills",
           hoverinfo = "text",
           showlegend = F
         ) %>%
         colorbar(title = '', tickfont = list(color = '#FFFFFF')) %>%
         layout(
-          plot_bgcolor = 'rgb(34,34,34)',
-          paper_bgcolor = 'rgb(34,34,34)',
+          plot_bgcolor = 'rgba(0,0,0,0)',
+          paper_bgcolor = 'rgba(0,0,0,0)',
           xaxis = list(fixedrange = TRUE),
           yaxis = list(fixedrange = TRUE),
           margin = list(
@@ -883,8 +941,6 @@ draw_map <-
         )
     }
   }
-
-
 
 calc_table <- function(data, selRegions, date) {
   summary <- data %>%
