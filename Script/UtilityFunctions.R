@@ -87,7 +87,7 @@ load_dati_reg <- function(path) {
     data.table::fread(input = path)
   
   dati_reg <- dati_reg %>%
-    select(-lat,-long,-variazione_totale_positivi,-note) %>%
+    select(-lat, -long, -variazione_totale_positivi, -note) %>%
     mutate(
       data = as.Date(strptime(data, format = "%Y-%m-%d", tz = 'UTC')),
       denominazione_regione = ifelse(
@@ -143,7 +143,7 @@ load_dati_reg_add <- function(dati_reg, dati_res_reg) {
     dati_reg %>% mutate(tasso_letalita = round((deceduti / totale_casi) * 100, 3))
   
   
-  dati_r <- dati_reg[0, ]
+  dati_r <- dati_reg[0,]
   dati_r$nuovi_deceduti <- 0
   dati_r$nuovi_dimessi <- 0
   dati_r$nuovi_tamponi <- 0
@@ -341,7 +341,7 @@ load_summary <- function (data, selRegions, date) {
 
 load_map_reg <- function(path) {
   data <- st_read(path, stringsAsFactors = FALSE)
-  data <- data[order(data$DEN_REG), ]
+  data <- data[order(data$DEN_REG),]
   return(data)
 }
 
@@ -439,15 +439,15 @@ draw_distr_chart <-
                          cc = c_color)
       
       f1 <-
-        data[data$xx == var_descrip[var_descrip$field_name == var[2], "description"], ]
+        data[data$xx == var_descrip[var_descrip$field_name == var[2], "description"],]
       f1 <- f1 %>% mutate(pp =  yy / summary[1, 'var1'])
       
       f2 <-
-        data[data$xx == var_descrip[var_descrip$field_name == var[3], "description"], ]
+        data[data$xx == var_descrip[var_descrip$field_name == var[3], "description"],]
       f2 <- f2 %>% mutate(pp =  yy / summary[1, 'var1'])
       
       f3 <-
-        data[data$xx == var_descrip[var_descrip$field_name == var[4], "description"], ]
+        data[data$xx == var_descrip[var_descrip$field_name == var[4], "description"],]
       f3 <- f3 %>% mutate(pp =  yy / summary[1, 'var1'])
       
       fig <- data %>%
@@ -634,14 +634,14 @@ draw_time_series_plot <-
           p <- plot_ly()
           
           for (reg in selRegions) {
-            xvalue = summary[summary$denominazione_regione == reg, ]$data
+            xvalue = summary[summary$denominazione_regione == reg,]$data
             
             subSum <-
               summary %>% filter(data == date &
                                    denominazione_regione == reg)
             num_abitanti <- subSum$num_abitanti
             
-            yvalue = summary[summary$denominazione_regione == reg, ][[var]] /
+            yvalue = summary[summary$denominazione_regione == reg,][[var]] /
               (num_abitanti / numCasi)
             
             p <-
@@ -679,8 +679,8 @@ draw_time_series_plot <-
           p <-
             add_trace(
               p,
-              x = summary[summary$denominazione_regione == reg, ]$data,
-              y = summary[summary$denominazione_regione == reg, ][[var]],
+              x = summary[summary$denominazione_regione == reg,]$data,
+              y = summary[summary$denominazione_regione == reg,][[var]],
               type = 'scatter',
               mode = "lines",
               name = reg
