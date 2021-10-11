@@ -17,7 +17,6 @@ sidebar <- dashboardSidebar(sidebarMenu(
     icon = icon("th"),
     tabName = "italy-tb",
     startExpanded = TRUE
-    
   ),
   div(
     id = 'sidebar_it',
@@ -27,11 +26,8 @@ sidebar <- dashboardSidebar(sidebarMenu(
       tags$div(
         class = "form-group shiny-input-container",
         tags$label(id = 'labelSelezionaRegioni', "Seleziona regioni:"),
-        withSpinner(
-          plotlyOutput(outputId = "selMap", height = 300),
-          type = 4,
-          size = 0.6
-        ),
+        withSpinner(plotlyOutput(outputId = "selMap", height = 300),
+                    size = 0.8),
         tags$label(
           id = 'infoMap',
           '(*) doppio clic su un\'area vuota della mappa per selezionare tutte le regioni'
@@ -53,16 +49,10 @@ sidebar <- dashboardSidebar(sidebarMenu(
         selected = 'SH'
       ),
       selectInput(
-        "selectChartTypeCurrDistr",
-        label = "Tipo grafico distribuzione:",
-        choices = list("Sunbarst chart" = 'S', "Horizontal bar" = 'H'),
-        selected = 'H'
-      ),
-      selectInput(
         "selectChartTimeCurrDistr",
         label = "Tipo grafico distribuzione nel tempo:",
         choices = list("Stacked bar chart" = 'S', "Line chart" = 'L'),
-        selected = 'S'
+        selected = 'L'
       ),
       checkboxInput("checkRisc", label = "Riscala mappa e serie storica per numero di residenti", value = F),
       uiOutput(outputId = 'numCas'),
@@ -83,7 +73,6 @@ body <- dashboardBody(
   skin = "black",
   
   includeCSS("styles.css"),
-  tags$script(src = "myscript.js"),
   
   tabItems(
     tabItem(tabName = "info",
@@ -94,206 +83,134 @@ body <- dashboardBody(
       fluidRow(
         box(
           width = 2,
-          height = 150,
-          title = var_descrip[var_descrip$field_name == 'totale_casi', 'description'],
-          withSpinner(
-            uiOutput("CumCases"),
-            type = 7,
-            size = 0.6,
-            proxy.height = "43px"
-          ),
-          withSpinner(
-            uiOutput("varCumCases"),
-            type = 7,
-            size = 0.3,
-            proxy.height = "43px"
+          title = div(id = 'CumCasesTitle', var_descrip[var_descrip$field_name == 'totale_casi', 'description']),
+          fluidRow(class = 'first_row',
+                   withSpinner(uiOutput("CumCases"), size = 0.7)),
+          fluidRow(
+            class = 'snd_row',
+            id = 'rowVarCumCases',
+            withSpinner(uiOutput("varCumCases"), size = 0.4)
           )
         ),
         box(
           width = 2,
-          height = 150,
-          title = textOutput("healedTitle"),
-          withSpinner(
-            uiOutput("CumHealed"),
-            type = 7,
-            size = 0.6,
-            proxy.height = "43px"
-          ),
-          withSpinner(
-            uiOutput("varCumHealed"),
-            type = 7,
-            size = 0.3,
-            proxy.height = "43px"
+          title = div(id = 'CumHealedTitle', var_descrip[var_descrip$field_name == 'dimessi_guariti', 'description']),
+          fluidRow(class = 'first_row',
+                   withSpinner(uiOutput("CumHealed"), size = 0.7)),
+          fluidRow(
+            class = 'snd_row',
+            id = 'rowVarCumHealed',
+            withSpinner(uiOutput("varCumHealed"), size = 0.4)
           )
         ),
         box(
           width = 2,
-          height = 150,
-          title = textOutput("deathsTitle"),
-          withSpinner(
-            uiOutput("Deaths"),
-            type = 7,
-            size = 0.6,
-            proxy.height = "43px"
-          ),
-          withSpinner(
-            uiOutput("varDeaths"),
-            type = 7,
-            size = 0.3,
-            proxy.height = "43px"
+          title = div(id = 'DeathsTitle', var_descrip[var_descrip$field_name == 'deceduti', 'description']),
+          fluidRow(class = 'first_row',
+                   withSpinner(uiOutput("Deaths"), size = 0.7)),
+          fluidRow(
+            class = 'snd_row',
+            id = 'rowVarDeaths',
+            withSpinner(uiOutput("varDeaths"), size = 0.4)
           )
         ),
         box(
           width = 2,
-          height = 150,
-          title = var_descrip[var_descrip$field_name == 'nuovi_positivi', 'description'],
-          withSpinner(
-            uiOutput("NewCases"),
-            type = 7,
-            size = 0.6,
-            proxy.height = "43px"
-          ),
-          withSpinner(
-            uiOutput("varNewCases"),
-            type = 7,
-            size = 0.3,
-            proxy.height = "43px"
+          title = div(id = 'NewPosTitle', var_descrip[var_descrip$field_name == 'nuovi_positivi', 'description']),
+          fluidRow(class = 'first_row',
+                   withSpinner(uiOutput("NewPos"), size = 0.7)),
+          fluidRow(
+            class = 'snd_row',
+            id = 'rowVarNewPos',
+            withSpinner(uiOutput("varNewPos"), size = 0.4)
           )
         ),
         box(
           width = 2,
-          height = 150,
-          title = var_descrip[var_descrip$field_name == 'tasso_letalita', 'description'],
-          withSpinner(
-            uiOutput("LethRate"),
-            type = 7,
-            size = 0.6,
-            proxy.height = "43px"
-          ),
-          withSpinner(
-            uiOutput("varLethRate"),
-            type = 7,
-            size = 0.3,
-            proxy.height = "43px"
+          title = div(id = 'LethRateTitle', var_descrip[var_descrip$field_name == 'tasso_letalita', 'description']),
+          fluidRow(class = 'first_row',
+                   withSpinner(uiOutput("LethRate"), size = 0.7)),
+          fluidRow(
+            class = 'snd_row',
+            id = 'rowVarLethRate',
+            withSpinner(uiOutput("varLethRate"), size = 0.4)
           )
         ),
         box(
           width = 2,
-          height = 150,
-          title = textOutput("swabsTitle"),
-          withSpinner(
-            uiOutput("Swabs"),
-            type = 7,
-            size = 0.6,
-            proxy.height = "43px"
-          ),
-          withSpinner(
-            uiOutput("varSwabs"),
-            type = 7,
-            size = 0.3,
-            proxy.height = "43px"
+          title = div(id = 'PosSwabsTitle', var_descrip[var_descrip$field_name == 'pos_tamponi', 'description']),
+          fluidRow(class = 'first_row',
+                   withSpinner(uiOutput("PosSwabs"), size = 0.7)),
+          fluidRow(
+            class = 'snd_row',
+            id = 'rowVarPosSwabs',
+            withSpinner(uiOutput("varPosSwabs"), size = 0.4)
           )
         ),
         box(
           width = 2,
-          height = 150,
-          title = var_descrip[var_descrip$field_name == 'totale_positivi', 'description'],
-          withSpinner(
-            uiOutput("CurrCases"),
-            type = 7,
-            size = 0.6,
-            proxy.height = "43px"
-          ),
-          withSpinner(
-            uiOutput("varCurrCases"),
-            type = 7,
-            size = 0.3,
-            proxy.height = "43px"
+          title = div(id = 'CurrCasesTitle', var_descrip[var_descrip$field_name == 'totale_positivi', 'description']),
+          fluidRow(class = 'first_row',
+                   withSpinner(uiOutput("CurrCases"), size = 0.7)),
+          fluidRow(
+            class = 'snd_row',
+            id = 'rowVarCurrCases',
+            withSpinner(uiOutput("varCurrCases"), size = 0.4)
           )
         ),
         box(
           width = 2,
-          height = 150,
-          title = var_descrip[var_descrip$field_name == 'isolamento_domiciliare', 'description'],
-          withSpinner(
-            uiOutput("CurrHomeIs"),
-            type = 7,
-            size = 0.6,
-            proxy.height = "43px"
-          ),
-          withSpinner(
-            uiOutput("varCurrHomeIs"),
-            type = 7,
-            size = 0.3,
-            proxy.height = "43px"
+          title = div(id = 'CurrHomeIsTitle', var_descrip[var_descrip$field_name == 'isolamento_domiciliare', 'description']),
+          fluidRow(class = 'first_row',
+                   withSpinner(uiOutput("CurrHomeIs"), size = 0.7)),
+          fluidRow(
+            class = 'snd_row',
+            id = 'rowVarCurrHomeIs',
+            withSpinner(uiOutput("varCurrHomeIs"), size = 0.4)
           )
         ),
         box(
           width = 2,
-          height = 150,
-          title = var_descrip[var_descrip$field_name == 'ricoverati_con_sintomi', 'description'],
-          withSpinner(
-            uiOutput("CurrHospSympt"),
-            type = 7,
-            size = 0.6,
-            proxy.height = "43px"
-          ),
-          withSpinner(
-            uiOutput("varCurrHospSympt"),
-            type = 7,
-            size = 0.3,
-            proxy.height = "43px"
+          title = div(id = 'CurrHospSymptTitle', var_descrip[var_descrip$field_name == 'ricoverati_con_sintomi', 'description']),
+          fluidRow(class = 'first_row',
+                   withSpinner(uiOutput("CurrHospSympt"), size = 0.7)),
+          fluidRow(
+            class = 'snd_row',
+            id = 'rowVarCurrHospSympt',
+            withSpinner(uiOutput("varCurrHospSympt"), size = 0.4)
           )
         ),
         box(
           width = 2,
-          height = 150,
-          title = var_descrip[var_descrip$field_name == 'terapia_intensiva', 'description'],
-          withSpinner(
-            uiOutput("CurrIntCare"),
-            type = 7,
-            size = 0.6,
-            proxy.height = "43px"
-          ),
-          withSpinner(
-            uiOutput("varCurrIntCare"),
-            type = 7,
-            size = 0.3,
-            proxy.height = "43px"
+          title = div(id = 'CurrIntCareTitle', var_descrip[var_descrip$field_name == 'terapia_intensiva', 'description']),
+          fluidRow(class = 'first_row',
+                   withSpinner(uiOutput("CurrIntCare"), size = 0.7)),
+          fluidRow(
+            class = 'snd_row',
+            id = 'rowVarCurrIntCare',
+            withSpinner(uiOutput("varCurrIntCare"), size = 0.4)
           )
         ),
         box(
           width = 2,
-          height = 150,
-          title = var_descrip[var_descrip$field_name == 'totale_ospedalizzati', 'description'],
-          withSpinner(
-            uiOutput("CurrHosp"),
-            type = 7,
-            size = 0.6,
-            proxy.height = "43px"
-          ),
-          withSpinner(
-            uiOutput("varCurrHosp"),
-            type = 7,
-            size = 0.3,
-            proxy.height = "43px"
+          title = div(id = 'CurrHospTitle', var_descrip[var_descrip$field_name == 'totale_ospedalizzati', 'description']),
+          fluidRow(class = 'first_row',
+                   withSpinner(uiOutput("CurrHosp"), size = 0.7)),
+          fluidRow(
+            class = 'snd_row',
+            id = 'rowVarCurrHosp',
+            withSpinner(uiOutput("varCurrHosp"), size = 0.4)
           )
         ),
         box(
           width = 2,
-          height = 150,
-          title = var_descrip[var_descrip$field_name == 'casi_testati', 'description'],
-          withSpinner(
-            uiOutput("TestedCases"),
-            type = 7,
-            size = 0.6,
-            proxy.height = "43px"
-          ),
-          withSpinner(
-            uiOutput("varTestedCases"),
-            type = 7,
-            size = 0.3,
-            proxy.height = "43px"
+          title = div(id = 'SwabsTitle', var_descrip[var_descrip$field_name == 'nuovi_tamponi', 'description']),
+          fluidRow(class = 'first_row',
+                   withSpinner(uiOutput("Swabs"), size = 0.7)),
+          fluidRow(
+            class = 'snd_row',
+            id = 'rowVarSwabs',
+            withSpinner(uiOutput("varSwabs"), size = 0.4)
           )
         )
       )
@@ -302,9 +219,8 @@ body <- dashboardBody(
                       fluidRow(
                         box(
                           width = 12,
-                          height = 950,
                           title = textOutput('mapTitle'),
-                          withSpinner(plotlyOutput(outputId = "mapRegDistr", height = 880), type = 4)
+                          withSpinner(plotlyOutput(outputId = "mapRegDistr", height = 880), size = 1)
                         )
                       )),
                column(
@@ -312,21 +228,15 @@ body <- dashboardBody(
                  fluidRow(
                    box(
                      width = 6,
-                     title = textOutput('titleCumCasesDistr'),
-                     withSpinner(
-                       plotlyOutput(outputId = "CumCasesDistr"),
-                       type = 4,
-                       size = 0.7
-                     )
+                     title = 'Distribuzione totale casi',
+                     withSpinner(plotlyOutput(outputId = "CumCasesDistr"),
+                                 size = 1)
                    ),
                    box(
                      width = 6,
-                     title = textOutput('title2'),
-                     withSpinner(
-                       plotlyOutput(outputId = "CurrPosDistr"),
-                       type = 4,
-                       size = 0.7
-                     )
+                     title = 'Distribuzione attuali positivi',
+                     withSpinner(plotlyOutput(outputId = "CurrPosDistr"),
+                                 size = 1)
                    )
                  ),
                  fluidRow(tabBox(
@@ -334,43 +244,34 @@ body <- dashboardBody(
                    id = "tabset",
                    tabPanel(
                      "Distribuzione totale casi",
-                     withSpinner(
-                       plotlyOutput(outputId = "timeCumCasesDistr"),
-                       type = 4,
-                       size = 0.7
-                     )
+                     withSpinner(plotlyOutput(outputId = "timeCumCasesDistr"),
+                                 size = 1)
                    )
                    ,
-                   tabPanel(
-                     "Distribuzione positivi",
-                     withSpinner(
-                       plotlyOutput(outputId = "timePosDistrib"),
-                       type = 4,
-                       size = 0.7
-                     )
-                   )
+                   tabPanel("Distribuzione positivi",
+                            withSpinner(
+                              plotlyOutput(outputId = "timePosDistrib"),
+                              size = 1
+                            ))
                    ,
                    tabPanel("Serie storica",
                             withSpinner(
                               plotlyOutput(outputId = "timeSeries"),
-                              type = 4,
-                              size = 0.7
+                              size = 1
                             ))
                    
                  ))
                )),
       fluidRow(box(
         width = 12,
-        withSpinner(
-          dataTableOutput(outputId = "deTable"),
-          type = 4,
-          size = 0.7
-        )
+        withSpinner(dataTableOutput(outputId = "deTable"),
+                    size = 1)
       ))
       
       
     )
-  )
+  ),
+  tags$script(src = "myscript.js"),
 )
 
 ui <- dashboardPage(skin = 'blue',
@@ -379,629 +280,268 @@ ui <- dashboardPage(skin = 'blue',
                     body)
 
 server <- function(input, output, session) {
+  get_rend_ui <- function(idUi, data, variab, type, mod = '1') {
+    switch(mod,
+           '1' = {
+             switch(type,
+                    'val' = {
+                      renderUI(div(
+                        id = paste0(idUi, 'Value'),
+                        class = 'valText',
+                        data()[['adds']][[1]][[variab]][[1]]
+                      ))
+                    },
+                    'var' = {
+                      renderUI(div(
+                        class = 'varText',
+                        div(
+                          id = paste0(idUi, 'Inc'),
+                          data()[['adds']][[1]][[variab]][[3]],
+                          style = data()[['adds']][[1]][[variab]][[8]]
+                        ),
+                        div(
+                          id = paste0(idUi, 'PercInc'),
+                          data()[['adds']][[1]][[variab]][[5]],
+                          style = paste0(data()[['adds']][[1]][[variab]][[8]], ';display: none;')
+                        )
+                      ))
+                    })
+           },
+           '2' = {
+             switch(type,
+                    'val' = {
+                      renderUI(div(
+                        id = paste0(idUi, 'Value'),
+                        class = 'valText',
+                        data()[['adds']][[1]][[variab]][[1]]
+                      ))
+                    },
+                    'var' = {
+                      renderUI(div(class = 'varText',
+                                   div(
+                                     id = paste0(idUi, 'PercInc'),
+                                     data()[['adds']][[1]][[variab]][[5]],
+                                     style = paste0(data()[['adds']][[1]][[variab]][[8]])
+                                   )))
+                    })
+             
+           })
+    
+    
+    
+  }
+  
+  
+  # Totale casi
   output$CumCases <-
-    renderUI(div(
-      class = 'valText',
-      prettyNum(
-        summary()$totale_casi[1],
-        big.mark = ".",
-        decimal.mark = ","
-      )
-    ))
+    get_rend_ui('CumCases', summary_it, 'totale_casi', 'val')
+  output$varCumCases <-
+    get_rend_ui('CumCases', summary_it, 'totale_casi', 'var')
   
-  output$varCumCases <- renderUI(div(class = 'varText', paste0(
-    ifelse(
-      prettyNum(
-        summary()$totale_casi[2],
-        big.mark = ".",
-        decimal.mark = ","
-      ) >= 0,
-      "+",
-      ""
-    ),
-    prettyNum(
-      summary()$totale_casi[2],
-      big.mark = ".",
-      decimal.mark = ","
-    ),
-    "%"
-  )))
+  # Nuovi positivi
+  output$NewPos <-
+    get_rend_ui('NewPos', summary_it, 'nuovi_positivi', 'val')
+  output$varNewPos <-
+    get_rend_ui('NewPos', summary_it, 'nuovi_positivi', 'var')
   
-  output$healedTitle <-
-    renderText(paste(var_descrip[var_descrip$field_name ==
-                                   'dimessi_guariti', "description"]))
+  # Tasso di letalità
+  output$LethRate <-
+    get_rend_ui('LethRate', summary_it, 'tasso_letalita', 'val', '2')
+  output$varLethRate <-
+    get_rend_ui('LethRate', summary_it, 'tasso_letalita', 'var', '2')
   
-  output$CumHealed <-
-    renderUI(div(
-      class = 'valText',
-      prettyNum(
-        summary()$dimessi_guariti[1],
-        big.mark = ".",
-        decimal.mark = ","
-      )
-    ))
+  # Positivi tamponi
+  output$PosSwabs <-
+    get_rend_ui('PosSwabs', summary_it, 'pos_tamponi', 'val', '2')
+  output$varPosSwabs <-
+    get_rend_ui('PosSwabs', summary_it, 'pos_tamponi', 'var', '2')
   
-  output$varCumHealed <- renderUI(div(class = 'varText', paste0(
-    ifelse(
-      prettyNum(
-        summary()$dimessi_guariti[2],
-        big.mark = ".",
-        decimal.mark = ","
-      ) >= 0,
-      "+",
-      ""
-    ),
-    prettyNum(
-      summary()$dimessi_guariti[2],
-      big.mark = ".",
-      decimal.mark = ","
-    ),
-    "%"
-  )))
-  
-  output$deathsTitle <-
-    renderText(paste(var_descrip[var_descrip$field_name ==
-                                   'deceduti', "description"]))
-  
-  output$Deaths <-
-    renderUI(div(
-      class = 'valText',
-      prettyNum(
-        summary()$deceduti[1],
-        big.mark = ".",
-        decimal.mark = ","
-      )
-    ))
-  
-  output$varDeaths <- renderUI(div(class = 'varText', paste0(
-    ifelse(
-      prettyNum(
-        summary()$deceduti[2],
-        big.mark = ".",
-        decimal.mark = ","
-      ) >= 0,
-      "+",
-      ""
-    ),
-    prettyNum(
-      summary()$deceduti[2],
-      big.mark = ".",
-      decimal.mark = ","
-    ),
-    "%"
-  )))
-  
-  output$NewCases <-
-    renderUI(div(
-      class = 'valText',
-      prettyNum(
-        summary()$nuovi_positivi[1],
-        big.mark = ".",
-        decimal.mark = ","
-      )
-    ))
-  
-  output$varNewCases <- renderUI(div(class = 'varText', paste0(
-    ifelse(
-      prettyNum(
-        summary()$nuovi_positivi[2],
-        big.mark = ".",
-        decimal.mark = ","
-      ) >= 0,
-      "+",
-      ""
-    ),
-    prettyNum(
-      summary()$nuovi_positivi[2],
-      big.mark = ".",
-      decimal.mark = ","
-    ),
-    "%"
-  )))
-  
-  output$LethRate <- renderUI(div(class = 'valText', paste0(
-    prettyNum(
-      summary()$tasso_letalita[1],
-      big.mark = ".",
-      decimal.mark = ","
-    ),
-    '%'
-  )))
-  
-  output$varLethRate <- renderUI(div(class = 'varText', paste0(
-    ifelse(
-      prettyNum(
-        summary()$tasso_letalita[2],
-        big.mark = ".",
-        decimal.mark = ","
-      ) >= 0,
-      "+",
-      ""
-    ),
-    prettyNum(
-      summary()$tasso_letalita[2],
-      big.mark = ".",
-      decimal.mark = ","
-    ),
-    "%"
-  )))
-  
-  output$swabsTitle <-
-    renderText(paste(var_descrip[var_descrip$field_name ==
-                                   'tamponi', "description"]))
-  
-  output$Swabs <-
-    renderUI(div(
-      class = 'valText',
-      prettyNum(
-        summary()$tamponi[1],
-        big.mark = ".",
-        decimal.mark = ","
-      )
-    ))
-  
-  output$varSwabs <- renderUI(div(class = 'varText', paste0(
-    ifelse(
-      prettyNum(
-        summary()$tamponi[2],
-        big.mark = ".",
-        decimal.mark = ","
-      ) >= 0,
-      "+",
-      ""
-    ),
-    prettyNum(summary()$tamponi[2], big.mark = " "),
-    "%"
-  )))
-  
+  # Attuali positivi
   output$CurrCases <-
-    renderUI(div(
-      class = 'valText',
-      prettyNum(
-        summary()$totale_positivi[1],
-        big.mark = ".",
-        decimal.mark = ","
-      )
-    ))
+    get_rend_ui('CurrCases', summary_it, 'totale_positivi', 'val')
+  output$varCurrCases <-
+    get_rend_ui('CurrCases', summary_it, 'totale_positivi', 'var')
   
-  output$varCurrCases <- renderUI(div(class = 'varText', paste0(
-    ifelse(
-      prettyNum(
-        summary()$totale_positivi[2],
-        big.mark = ".",
-        decimal.mark = ","
-      ) >= 0,
-      "+",
-      ""
-    ),
-    prettyNum(
-      summary()$totale_positivi[2],
-      big.mark = ".",
-      decimal.mark = ","
-    ),
-    "%"
-  )))
+  # Isolamento domiciliare
+  output$CurrHomeIs <-
+    get_rend_ui('CurrHomeIs', summary_it, 'isolamento_domiciliare', 'val')
+  output$varCurrHomeIs <-
+    get_rend_ui('CurrHomeIs', summary_it, 'isolamento_domiciliare', 'var')
   
-  output$CurrHomeIs <- renderUI(div(
-    class = 'valText',
-    prettyNum(
-      summary()$isolamento_domiciliare[1],
-      big.mark = ".",
-      decimal.mark = ","
-    )
-  ))
+  # Ricoverati con sintomi
+  output$CurrHospSympt <-
+    get_rend_ui('CurrHospSympt',
+                summary_it,
+                'ricoverati_con_sintomi',
+                'val')
+  output$varCurrHospSympt <-
+    get_rend_ui('CurrHospSympt',
+                summary_it,
+                'ricoverati_con_sintomi',
+                'var')
   
-  output$varCurrHomeIs <- renderUI(div(class = 'varText', paste0(
-    ifelse(
-      prettyNum(
-        summary()$isolamento_domiciliare[2],
-        big.mark = ".",
-        decimal.mark = ","
-      ) >= 0,
-      "+",
-      ""
-    ),
-    prettyNum(
-      summary()$isolamento_domiciliare[2],
-      big.mark = ".",
-      decimal.mark = ","
-    ),
-    "%"
-  )))
+  # Terapia intensiva
+  output$CurrIntCare <-
+    get_rend_ui('CurrIntCare', summary_it, 'terapia_intensiva', 'val')
+  output$varCurrIntCare <-
+    get_rend_ui('CurrIntCare', summary_it, 'terapia_intensiva', 'var')
   
-  output$CurrHospSympt <- renderUI(div(
-    class = 'valText',
-    prettyNum(
-      summary()$ricoverati_con_sintomi[1],
-      big.mark = ".",
-      decimal.mark = ","
-    )
-  ))
+  # Totale ospedalizzati
+  output$CurrHosp <-
+    get_rend_ui('CurrHosp', summary_it, 'totale_ospedalizzati', 'val')
+  output$varCurrHosp <-
+    get_rend_ui('CurrHosp', summary_it, 'totale_ospedalizzati', 'var')
   
-  output$varCurrHospSympt <- renderUI(div(class = 'varText', paste0(
-    ifelse(
-      prettyNum(
-        summary()$ricoverati_con_sintomi[2],
-        big.mark = ".",
-        decimal.mark = ","
-      ) >= 0,
-      "+",
-      ""
-    ),
-    prettyNum(
-      summary()$ricoverati_con_sintomi[2],
-      big.mark = ".",
-      decimal.mark = ","
-    ),
-    "%"
-  )))
-  
-  output$CurrIntCare <- renderUI(div(
-    class = 'valText',
-    prettyNum(
-      summary()$terapia_intensiva[1],
-      big.mark = ".",
-      decimal.mark = ","
-    )
-  ))
-  
-  output$varCurrIntCare <- renderUI(div(class = 'varText', paste0(
-    ifelse(
-      prettyNum(
-        summary()$terapia_intensiva[2],
-        big.mark = ".",
-        decimal.mark = ","
-      ) >= 0,
-      "+",
-      ""
-    ),
-    prettyNum(
-      summary()$terapia_intensiva[2],
-      big.mark = ".",
-      decimal.mark = ","
-    ),
-    "%"
-  )))
-  
-  output$CurrHosp <- renderUI(div(
-    class = 'valText',
-    prettyNum(
-      summary()$totale_ospedalizzati[1],
-      big.mark = ".",
-      decimal.mark = ","
-    )
-  ))
-  
-  output$varCurrHosp <- renderUI(div(class = 'varText', paste0(
-    ifelse(
-      prettyNum(
-        summary()$totale_ospedalizzati[2],
-        big.mark = ".",
-        decimal.mark = ","
-      ) >= 0,
-      "+",
-      ""
-    ),
-    prettyNum(
-      summary()$totale_ospedalizzati[2],
-      big.mark = ".",
-      decimal.mark = ","
-    ),
-    "%"
-  )))
-  
-  output$TestedCases <-
-    renderUI(div(
-      class = 'valText',
-      prettyNum(
-        summary()$casi_testati[1],
-        big.mark = ".",
-        decimal.mark = ","
-      )
-    ))
-  
-  output$varTestedCases <- renderUI(div(class = 'varText', paste0(
-    ifelse(
-      prettyNum(
-        summary()$casi_testati[2],
-        big.mark = ".",
-        decimal.mark = ","
-      ) >= 0,
-      "+",
-      ""
-    ),
-    prettyNum(
-      summary()$casi_testati[2],
-      big.mark = ".",
-      decimal.mark = ","
-    ),
-    "%"
-  )))
-  
+  responHealeds <- reactiveVal('')
+  responDeaths <- reactiveVal('')
+  responSwabs <- reactiveVal('')
   
   observeEvent(input$selectVar, {
-    if (input$selectVar == 'nuovi_dimessi') {
-      output$healedTitle <- renderText({
-        paste(var_descrip[var_descrip$field_name == 'nuovi_dimessi', "description"])
-      })
-      
-      output$CumHealed <- renderUI(div(
-        class = 'valText',
-        prettyNum(
-          summary()$nuovi_dimessi[1],
-          big.mark = ".",
-          decimal.mark = ","
-        )
-      ))
-      
-      output$varCumHealed <- renderUI(div(class = 'varText', paste0(
-        ifelse(
-          prettyNum(
-            summary()$nuovi_dimessi[2],
-            big.mark = ".",
-            decimal.mark = ","
-          ) >= 0,
-          "+",
-          ""
-        ),
-        prettyNum(
-          summary()$nuovi_dimessi[2],
-          big.mark = ".",
-          decimal.mark = ","
-        ),
-        "%"
-      )))
-      
-    }
-    
-    
-    if (input$selectVar == 'dimessi_guariti') {
-      output$healedTitle <- renderText({
-        paste(var_descrip[var_descrip$field_name == 'dimessi_guariti', "description"])
-      })
-      
-      output$CumHealed <- renderUI(div(
-        class = 'valText',
-        prettyNum(
-          summary()$dimessi_guariti[1],
-          big.mark = ".",
-          decimal.mark = ","
-        )
-      ))
-      
-      output$varCumHealed <- renderUI(div(class = 'varText', paste0(
-        ifelse(
-          prettyNum(
-            summary()$dimessi_guariti[2],
-            big.mark = ".",
-            decimal.mark = ","
-          ) >= 0,
-          "+",
-          ""
-        ),
-        prettyNum(
-          summary()$dimessi_guariti[2],
-          big.mark = ".",
-          decimal.mark = ","
-        ),
-        "%"
-      )))
-      
-    }
-    
-    
-    if (input$selectVar == 'nuovi_deceduti') {
-      output$deathsTitle <- renderText({
-        paste(var_descrip[var_descrip$field_name == 'nuovi_deceduti', "description"])
-      })
-      
-      output$Deaths <- renderUI(div(
-        class = 'valText',
-        prettyNum(
-          summary()$nuovi_deceduti[1],
-          big.mark = ".",
-          decimal.mark = ","
-        )
-      ))
-      
-      output$varDeaths <- renderUI(div(class = 'varText', paste0(
-        ifelse(
-          prettyNum(
-            summary()$nuovi_deceduti[2],
-            big.mark = ".",
-            decimal.mark = ","
-          ) >= 0,
-          "+",
-          ""
-        ),
-        prettyNum(
-          summary()$nuovi_deceduti[2],
-          big.mark = ".",
-          decimal.mark = ","
-        ),
-        "%"
-      )))
-      
-    }
-    
-    if (input$selectVar == 'deceduti') {
-      output$deathsTitle <- renderText({
-        paste(var_descrip[var_descrip$field_name == 'deceduti', "description"])
-      })
-      
+    if (responDeaths() == '') {
       output$Deaths <-
-        renderUI(div(
-          class = 'valText',
-          prettyNum(
-            summary()$deceduti[1],
-            big.mark = ".",
-            decimal.mark = ","
-          )
-        ))
+        get_rend_ui('Deaths', summary_it, 'deceduti', 'val')
+      output$varDeaths <-
+        get_rend_ui('Deaths', summary_it, 'deceduti', 'var')
       
-      output$varDeaths <- renderUI(div(class = 'varText', paste0(
-        ifelse(
-          prettyNum(
-            summary()$deceduti[2],
-            big.mark = ".",
-            decimal.mark = ","
-          ) >= 0,
-          "+",
-          ""
-        ),
-        prettyNum(
-          summary()$deceduti[2],
-          big.mark = ".",
-          decimal.mark = ","
-        ),
-        "%"
-      )))
+      responDeaths('deceduti')
       
-    }
-    
-    
-    if (input$selectVar == 'nuovi_tamponi') {
-      output$swabsTitle <- renderText({
-        paste(var_descrip[var_descrip$field_name == 'nuovi_tamponi', "description"])
-      })
+    } else {
+      if (input$selectVar == 'deceduti' && responDeaths() != 'deceduti') {
+        changeVarValue('DeathsTitle', var_descrip[var_descrip$field_name == 'deceduti', 'description'])
+        
+        output$Deaths <-
+          get_rend_ui('Deaths', summary_it, 'deceduti', 'val')
+        output$varDeaths <-
+          get_rend_ui('Deaths', summary_it, 'deceduti', 'var')
+        
+        responDeaths('deceduti')
+      }
       
-      output$Swabs <- renderUI(div(
-        class = 'valText',
-        prettyNum(
-          summary()$nuovi_tamponi[1],
-          big.mark = ".",
-          decimal.mark = ","
-        )
-      ))
-      
-      output$varSwabs <- renderUI(div(class = 'varText', paste0(
-        ifelse(
-          prettyNum(
-            summary()$nuovi_tamponi[2],
-            big.mark = ".",
-            decimal.mark = ","
-          ) >= 0,
-          "+",
-          ""
-        ),
-        prettyNum(
-          summary()$nuovi_tamponi[2],
-          big.mark = ".",
-          decimal.mark = ","
-        ),
-        "%"
-      )))
+      if (input$selectVar == 'nuovi_deceduti' &&
+          responDeaths() != 'nuovi_deceduti') {
+        changeVarValue('DeathsTitle', var_descrip[var_descrip$field_name == 'nuovi_deceduti', 'description'])
+        
+        output$Deaths <-
+          get_rend_ui('Deaths', summary_it, 'nuovi_deceduti', 'val')
+        output$varDeaths <-
+          get_rend_ui('Deaths', summary_it, 'nuovi_deceduti', 'var')
+        
+        responDeaths('nuovi_deceduti')
+      }
       
     }
-    
-    if (input$selectVar == 'tamponi') {
-      output$swabsTitle <- renderText({
-        paste(var_descrip[var_descrip$field_name == 'tamponi', "description"])
-      })
-      
-      output$Swabs <-
-        renderUI(div(
-          class = 'valText',
-          prettyNum(
-            summary()$tamponi[1],
-            big.mark = ".",
-            decimal.mark = ","
-          )
-        ))
-      
-      output$varSwabs <- renderUI(div(class = 'varText', paste0(
-        ifelse(
-          prettyNum(
-            summary()$tamponi[2],
-            big.mark = ".",
-            decimal.mark = ","
-          ) >= 0,
-          "+",
-          ""
-        ),
-        prettyNum(
-          summary()$tamponi[2],
-          big.mark = ".",
-          decimal.mark = ","
-        ),
-        "%"
-      )))
-      
-    }
-    
-    if (input$selectVar == 'pos_tamponi') {
-      output$swabsTitle <- renderText({
-        paste(var_descrip[var_descrip$field_name == 'pos_tamponi', "description"])
-      })
-      
-      output$Swabs <- renderUI(div(class = 'valText', paste0(
-        prettyNum(
-          summary()$pos_tamponi[1],
-          big.mark = ".",
-          decimal.mark = ","
-        ),
-        "%"
-      )))
-      
-      output$varSwabs <- renderUI(div(class = 'varText', paste0(
-        ifelse(
-          prettyNum(
-            summary()$pos_tamponi[2],
-            big.mark = ".",
-            decimal.mark = ","
-          ) >= 0,
-          "+",
-          ""
-        ),
-        prettyNum(
-          summary()$pos_tamponi[2],
-          big.mark = ".",
-          decimal.mark = ","
-        ),
-        "%"
-      )))
-      
-    }
-    
-    
     
   })
   
+  observeEvent(input$selectVar, {
+    if (responHealeds() == '') {
+      # Dimessi guariti
+      output$CumHealed <-
+        get_rend_ui('CumHealed', summary_it, 'dimessi_guariti', 'val')
+      output$varCumHealed <-
+        get_rend_ui('CumHealed', summary_it, 'dimessi_guariti', 'var')
+      
+      responHealeds('dimessi_guariti')
+      
+    } else {
+      if (input$selectVar == 'dimessi_guariti' &&
+          responHealeds() != 'dimessi_guariti') {
+        changeVarValue('CumHealedTitle', var_descrip[var_descrip$field_name == 'dimessi_guariti', 'description'])
+        
+        output$CumHealed <-
+          get_rend_ui('CumHealed', summary_it, 'dimessi_guariti', 'val')
+        output$varCumHealed <-
+          get_rend_ui('CumHealed', summary_it, 'dimessi_guariti', 'var')
+        
+        responHealeds('dimessi_guariti')
+      }
+      
+      if (input$selectVar == 'nuovi_dimessi' &&
+          responHealeds() != 'nuovi_dimessi') {
+        changeVarValue('CumHealedTitle', var_descrip[var_descrip$field_name == 'nuovi_dimessi', 'description'])
+        
+        output$CumHealed <-
+          get_rend_ui('CumHealed', summary_it, 'nuovi_dimessi', 'val')
+        output$varCumHealed <-
+          get_rend_ui('CumHealed', summary_it, 'nuovi_dimessi', 'var')
+        
+        responHealeds('nuovi_dimessi')
+      }
+      
+    }
+    
+  })
   
-  # Sunburst vs horizontal bar chart
+  observeEvent(input$selectVar, {
+    if (responSwabs() == '') {
+      # Dimessi guariti
+      output$Swabs <-
+        get_rend_ui('Swabs', summary_it, 'nuovi_tamponi', 'val')
+      output$varSwabs <-
+        get_rend_ui('Swabs', summary_it, 'nuovi_tamponi', 'var')
+      
+      responSwabs('nuovi_tamponi')
+      
+    } else {
+      if (input$selectVar == 'nuovi_tamponi' &&
+          responSwabs() != 'nuovi_tamponi') {
+        changeVarValue('SwabsTitle', var_descrip[var_descrip$field_name == 'nuovi_tamponi', 'description'])
+        
+        output$Swabs <-
+          get_rend_ui('Swabs', summary_it, 'nuovi_tamponi', 'val')
+        output$varSwabs <-
+          get_rend_ui('Swabs', summary_it, 'nuovi_tamponi', 'var')
+        
+        responSwabs('nuovi_tamponi')
+      }
+      
+      if (input$selectVar == 'tamponi' &&
+          responSwabs() != 'tamponi') {
+        changeVarValue('SwabsTitle', var_descrip[var_descrip$field_name == 'tamponi', 'description'])
+        
+        output$Swabs <-
+          get_rend_ui('Swabs', summary_it, 'tamponi', 'val')
+        output$varSwabs <-
+          get_rend_ui('Swabs', summary_it, 'tamponi', 'var')
+        
+        responSwabs('tamponi')
+      }
+      
+      if (input$selectVar == 'casi_testati' &&
+          responSwabs() != 'casi_testati') {
+        changeVarValue('SwabsTitle', var_descrip[var_descrip$field_name == 'casi_testati', 'description'])
+        
+        output$Swabs <-
+          get_rend_ui('Swabs', summary_it, 'casi_testati', 'val')
+        output$varSwabs <-
+          get_rend_ui('Swabs', summary_it, 'casi_testati', 'var')
+        
+        responSwabs('casi_testati')
+      }
+      
+    }
+    
+  })
   
   output$CumCasesDistr <- renderPlotly({
     req(input$selRefDate)
     draw_distr_chart(
-      data = dati_reg_add(),
+      summary_it = summary_it(),
       selRegions = sel_reg(),
       date = input$selRefDate,
-      typeDistr = 'T',
-      selChDistrCurr = input$selectChartTypeCurrDistr
+      typeDistr = 'T'
     )
   })
-  
-  output$titleCumCasesDistr <-
-    renderText({
-      'Distribuzione totale casi'
-    })
   
   output$CurrPosDistr <- renderPlotly({
     req(input$selRefDate)
     draw_distr_chart(
-      data = dati_reg_add(),
+      summary_it = summary_it(),
       selRegions = sel_reg(),
       date = input$selRefDate,
-      typeDistr = 'P',
-      selChDistrCurr = input$selectChartTypeCurrDistr
+      typeDistr = 'P'
     )
   })
-  
-  output$title2 <-
-    renderText({
-      'Distribuzione attuali positivi'
-    })
-  
   
   # Stacked bar chart vs line chart
   
@@ -1037,57 +577,70 @@ server <- function(input, output, session) {
     )
   })
   
+  
+  
+  # Selection Map
+  
   output$selMap <- renderPlotly({
-    m <- list(l = 20,
-              r = 20,
-              b = 10,
-              t = 10)
-    
-    cols <-
-      c(
-        "#00ff00",
-        "#00ff00",
-        "#00ff00",
-        "#00ff00",
-        "#00ff00",
-        "#00ff00",
-        "#00ff00",
-        "#00ff00",
-        "#00ff00",
-        "#00ff00",
-        "#00ff00",
-        "#00ff00",
-        "#00ff00",
-        "#00ff00",
-        "#00ff00",
-        "#00ff00",
-        "#00ff00",
-        "#00ff00",
-        "#00ff00",
-        "#00ff00"
-      )
-    
     plot_ly(
       sf_reg(),
       alpha = 1,
       color = ~ DEN_REG,
-      colors = cols,
+      colors = rep('#00ff00', dim(sf_reg())[1]),
       stroke = I("#666666"),
       span = I(1),
       key = ~ DEN_REG,
       source = 'M'
     ) %>%
       layout(
-        plot_bgcolor = '#222d32',
-        paper_bgcolor = '#222d32',
+        plot_bgcolor = 'rgba(0,0,0,0)',
+        paper_bgcolor = 'rgba(0,0,0,0)',
         showlegend = F,
-        margin = m,
+        margin = list(
+          l = 20,
+          r = 20,
+          b = 10,
+          t = 10
+        ),
         xaxis = list(fixedrange = TRUE),
         yaxis = list(fixedrange = TRUE)
       ) %>%
       config(displayModeBar = FALSE)
+  })
+  
+  # click observer
+  
+  observeEvent(event_data("plotly_click", "M", priority = "event"), {
+    reg <- event_data("plotly_click", "M")$key
+    
+    if (length(sel_reg()) == length(regions)) {
+      sel_reg(reg)
+    } else {
+      if (reg %in% sel_reg() && length(sel_reg()) > 1) {
+        sel_reg(sel_reg()[!(sel_reg() %in% reg)])
+      }
+      else {
+        sel_reg(unique(c(sel_reg(), reg)))
+      }
+    }
+    
+    cols <-
+      ifelse(sf_reg()$DEN_REG %in% sel_reg(), "#00ff00", '#222222')
+    
+    plotlyProxy("selMap", session) %>%
+      plotlyProxyInvoke("restyle", list(fillcolor = cols))
     
   })
+  
+  
+  observeEvent(event_data("plotly_doubleclick", "M"), {
+    sel_reg(regions)
+    
+    plotlyProxy("selMap", session) %>%
+      plotlyProxyInvoke("restyle", list(fillcolor = rep('#00ff00', length(regions))))
+    
+  })
+  
   
   sel_reg <- reactiveVal(regions)
   
@@ -1132,25 +685,12 @@ server <- function(input, output, session) {
     }
   })
   
-  
-  dati_reg <- reactive({
-    load_dati_reg(path = "https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-regioni/dpc-covid19-ita-regioni.csv")
-  })
-  
-  dati_residenti <- reactive({
-    load_dati_res(path = "residenti2019.csv")
-  })
-  
-  dati_reg_add <- reactive({
-    load_dati_reg_add(dati_reg = dati_reg(), dati_res_reg = dati_residenti())
-  })
-  
   output$selRefDate <- renderUI({
     req(dati_reg_add())
     dateInput(
       inputId = 'selRefDate',
       label = 'Data di riferimento:',
-      min = min(dati_reg_add()$data),
+      min = min(dati_reg_add()$data) + 1,
       max = max(dati_reg_add()$data),
       value = max(dati_reg_add()$data),
       language = 'it'
@@ -1186,7 +726,7 @@ server <- function(input, output, session) {
       
       draw_map(
         datasf = sf_reg(),
-        data = dati_reg_add(),
+        data = summary_per_reg(),
         selRegions = sel_reg(),
         date = input$selRefDate,
         var = input$selectVar,
@@ -1198,7 +738,7 @@ server <- function(input, output, session) {
     } else {
       draw_map(
         datasf = sf_reg(),
-        data = dati_reg_add(),
+        data = summary_per_reg(),
         selRegions = sel_reg(),
         date = input$selRefDate,
         var = input$selectVar,
@@ -1236,129 +776,159 @@ server <- function(input, output, session) {
     }
   })
   
-  summary <- reactive({
+  dati_residenti <- reactive({
+    load_dati_res(path = "residenti2019.csv")
+  })
+  
+  dati_reg <- reactive({
+    load_dati_reg(path = "https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-regioni/dpc-covid19-ita-regioni.csv")
+    # load_dati_reg(path = 'dpc-covid19-ita-regioni.csv')
+  })
+  
+  dati_reg_add <- reactive({
+    load_dati_reg_add(dati_reg = dati_reg(), dati_res_reg = dati_residenti())
+  })
+  
+  summary_per_reg <- reactive({
     req(input$selRefDate)
-    load_summary(
+    load_summary_per_reg(data = dati_reg_add(),
+                         date = input$selRefDate)
+  })
+  
+  summary_it <- reactive({
+    req(input$selRefDate)
+    load_summary_it(
       data = dati_reg_add(),
       selRegions = sel_reg(),
       date = input$selRefDate
     )
   })
   
+  changeVariableColor <- function(id, rgb) {
+    session$sendCustomMessage('changeVariableColor',
+                              message = list('id' = id, 'color' = rgb))
+  }
   
-  # Map: clicks observer
-  
-  observeEvent(event_data("plotly_click", "M", priority = "event"), {
-    reg <- event_data("plotly_click", "M")$key
-    
-    if (length(sel_reg()) == 20) {
-      sel_reg(reg)
-    } else {
-      if (reg %in% sel_reg() && length(sel_reg()) > 1) {
-        sel_reg(sel_reg()[!(sel_reg() %in% reg)])
-      }
-      else {
-        sel_reg(unique(c(sel_reg(), reg)))
-      }
-    }
-    
-    cols <-
-      ifelse(sf_reg()$DEN_REG %in% sel_reg(), "#00ff00", '#222222')
-    
-    plotlyProxy("selMap", session) %>%
-      plotlyProxyInvoke("restyle", list(fillcolor = cols))
-    
-  })
-  
-  
-  observeEvent(event_data("plotly_doubleclick", "M"), {
-    sel_reg(regions)
-    
-    cols <-
-      ifelse(sf_reg()$DEN_REG %in% sel_reg(), "#00ff00", '#00ff00')
-    
-    plotlyProxy("selMap", session) %>%
-      plotlyProxyInvoke("restyle", list(fillcolor = cols))
-    
-  })
-  
+  changeVarValue <- function(id, value) {
+    session$sendCustomMessage('changeVarValue',
+                              message = list('id' = id, 'value' = value))
+  }
   
   observeEvent(input$selectVar, {
-    changeTxtColor('CumCases', '#FFFFFF')
-    changeTxtColor('CumHealed', '#FFFFFF')
-    changeTxtColor('Deaths', '#FFFFFF')
-    changeTxtColor('NewCases', '#FFFFFF')
-    changeTxtColor('LethRate', '#FFFFFF')
-    changeTxtColor('Swabs', '#FFFFFF')
-    changeTxtColor('CurrCases', '#FFFFFF')
-    changeTxtColor('CurrHomeIs', '#FFFFFF')
-    changeTxtColor('CurrHospSympt', '#FFFFFF')
-    changeTxtColor('CurrIntCare', '#FFFFFF')
-    changeTxtColor('CurrHosp', '#FFFFFF')
-    changeTxtColor('TestedCases', '#FFFFFF')
+    changeVariableColor('CumCases', '#FFFFFF')
+    changeVariableColor('CumCasesTitle', '#FFFFFF')
+    
+    changeVariableColor('CumHealed', '#FFFFFF')
+    changeVariableColor('CumHealedTitle', '#FFFFFF')
+    
+    changeVariableColor('Deaths', '#FFFFFF')
+    changeVariableColor('DeathsTitle', '#FFFFFF')
+    
+    changeVariableColor('NewPos', '#FFFFFF')
+    changeVariableColor('NewPosTitle', '#FFFFFF')
+    
+    changeVariableColor('LethRate', '#FFFFFF')
+    changeVariableColor('LethRateTitle', '#FFFFFF')
+    
+    changeVariableColor('PosSwabs', '#FFFFFF')
+    changeVariableColor('PosSwabsTitle', '#FFFFFF')
+    
+    changeVariableColor('CurrCases', '#FFFFFF')
+    changeVariableColor('CurrCasesTitle', '#FFFFFF')
+    
+    changeVariableColor('CurrHomeIs', '#FFFFFF')
+    changeVariableColor('CurrHomeIsTitle', '#FFFFFF')
+    
+    changeVariableColor('CurrHospSympt', '#FFFFFF')
+    changeVariableColor('CurrHospSymptTitle', '#FFFFFF')
+    
+    changeVariableColor('CurrIntCare', '#FFFFFF')
+    changeVariableColor('CurrIntCareTitle', '#FFFFFF')
+    
+    changeVariableColor('CurrHosp', '#FFFFFF')
+    changeVariableColor('CurrHospTitle', '#FFFFFF')
+    
+    changeVariableColor('Swabs', '#FFFFFF')
+    changeVariableColor('SwabsTitle', '#FFFFFF')
     
     
     switch(
       input$selectVar,
       'totale_casi' = {
-        changeTxtColor('CumCases', var_descrip[var_descrip$field_name == input$selectVar, "field_color"])
+        changeVariableColor('CumCases', var_descrip[var_descrip$field_name == 'totale_casi', "field_color"])
+        changeVariableColor('CumCasesTitle', var_descrip[var_descrip$field_name == 'totale_casi', "field_color"])
       },
       'dimessi_guariti' = {
-        changeTxtColor('CumHealed', var_descrip[var_descrip$field_name == 'dimessi_guariti', "field_color"])
+        changeVariableColor('CumHealed', var_descrip[var_descrip$field_name == 'dimessi_guariti', "field_color"])
+        changeVariableColor('CumHealedTitle', var_descrip[var_descrip$field_name == 'dimessi_guariti', "field_color"])
       },
       'nuovi_dimessi' = {
-        changeTxtColor('CumHealed', var_descrip[var_descrip$field_name == 'nuovi_dimessi', "field_color"])
+        changeVariableColor('CumHealed', var_descrip[var_descrip$field_name == 'nuovi_dimessi', "field_color"])
+        changeVariableColor('CumHealedTitle', var_descrip[var_descrip$field_name == 'nuovi_dimessi', "field_color"])
       },
       'deceduti' = {
-        changeTxtColor('Deaths', var_descrip[var_descrip$field_name == 'deceduti', "field_color"])
+        changeVariableColor('Deaths', var_descrip[var_descrip$field_name == 'deceduti', "field_color"])
+        changeVariableColor('DeathsTitle', var_descrip[var_descrip$field_name == 'deceduti', "field_color"])
       },
       'nuovi_deceduti' = {
-        changeTxtColor('Deaths', var_descrip[var_descrip$field_name == 'nuovi_deceduti', "field_color"])
+        changeVariableColor('Deaths', var_descrip[var_descrip$field_name == 'nuovi_deceduti', "field_color"])
+        changeVariableColor('DeathsTitle', var_descrip[var_descrip$field_name == 'nuovi_deceduti', "field_color"])
       },
       'nuovi_positivi' = {
-        changeTxtColor('NewCases', var_descrip[var_descrip$field_name == 'nuovi_positivi', "field_color"])
+        changeVariableColor('NewPos', var_descrip[var_descrip$field_name == 'nuovi_positivi', "field_color"])
+        changeVariableColor('NewPosTitle', var_descrip[var_descrip$field_name == 'nuovi_positivi', "field_color"])
       },
       'tasso_letalita' = {
-        changeTxtColor('LethRate', var_descrip[var_descrip$field_name == 'tasso_letalita', "field_color"])
-      },
-      'tamponi' = {
-        changeTxtColor('Swabs', var_descrip[var_descrip$field_name == 'tamponi', "field_color"])
-      },
-      'nuovi_tamponi' = {
-        changeTxtColor('Swabs', var_descrip[var_descrip$field_name == 'nuovi_tamponi', "field_color"])
+        changeVariableColor('LethRate', var_descrip[var_descrip$field_name == 'tasso_letalita', "field_color"])
+        changeVariableColor('LethRateTitle', var_descrip[var_descrip$field_name == 'tasso_letalita', "field_color"])
       },
       'pos_tamponi' = {
-        changeTxtColor('Swabs', var_descrip[var_descrip$field_name == 'pos_tamponi', "field_color"])
+        changeVariableColor('PosSwabs', var_descrip[var_descrip$field_name == 'pos_tamponi', "field_color"])
+        changeVariableColor('PosSwabsTitle', var_descrip[var_descrip$field_name == 'pos_tamponi', "field_color"])
       },
       'totale_positivi' = {
-        changeTxtColor('CurrCases', var_descrip[var_descrip$field_name == 'totale_positivi', "field_color"])
+        changeVariableColor('CurrCases', var_descrip[var_descrip$field_name == 'totale_positivi', "field_color"])
+        changeVariableColor('CurrCasesTitle', var_descrip[var_descrip$field_name == 'totale_positivi', "field_color"])
       },
       'isolamento_domiciliare' = {
-        changeTxtColor('CurrHomeIs', var_descrip[var_descrip$field_name == 'isolamento_domiciliare', "field_color"])
+        changeVariableColor('CurrHomeIs', var_descrip[var_descrip$field_name == 'isolamento_domiciliare', "field_color"])
+        changeVariableColor('CurrHomeIsTitle', var_descrip[var_descrip$field_name == 'isolamento_domiciliare', "field_color"])
       },
       'ricoverati_con_sintomi' = {
-        changeTxtColor('CurrHospSympt', var_descrip[var_descrip$field_name == 'ricoverati_con_sintomi', "field_color"])
+        changeVariableColor('CurrHospSympt', var_descrip[var_descrip$field_name == 'ricoverati_con_sintomi', "field_color"])
+        changeVariableColor('CurrHospSymptTitle', var_descrip[var_descrip$field_name == 'ricoverati_con_sintomi', "field_color"])
       },
       'terapia_intensiva' = {
-        changeTxtColor('CurrIntCare', var_descrip[var_descrip$field_name == 'terapia_intensiva', "field_color"])
+        changeVariableColor('CurrIntCare', var_descrip[var_descrip$field_name == 'terapia_intensiva', "field_color"])
+        changeVariableColor('CurrIntCareTitle', var_descrip[var_descrip$field_name == 'terapia_intensiva', "field_color"])
       },
       'totale_ospedalizzati' = {
-        changeTxtColor('CurrHosp', var_descrip[var_descrip$field_name == 'totale_ospedalizzati', "field_color"])
+        changeVariableColor('CurrHosp', var_descrip[var_descrip$field_name == 'totale_ospedalizzati', "field_color"])
+        changeVariableColor('CurrHospTitle', var_descrip[var_descrip$field_name == 'totale_ospedalizzati', "field_color"])
       },
       'casi_testati' = {
-        changeTxtColor('TestedCases', var_descrip[var_descrip$field_name == 'casi_testati', "field_color"])
+        changeVariableColor('Swabs', var_descrip[var_descrip$field_name == 'casi_testati', "field_color"])
+        changeVariableColor('SwabsTitle', var_descrip[var_descrip$field_name == 'casi_testati', "field_color"])
+      },
+      'tamponi' = {
+        changeVariableColor('Swabs', var_descrip[var_descrip$field_name == 'tamponi', "field_color"])
+        changeVariableColor('SwabsTitle', var_descrip[var_descrip$field_name == 'tamponi', "field_color"])
+      },
+      'nuovi_tamponi' = {
+        changeVariableColor('Swabs', var_descrip[var_descrip$field_name == 'nuovi_tamponi', "field_color"])
+        changeVariableColor('SwabsTitle', var_descrip[var_descrip$field_name == 'nuovi_tamponi', "field_color"])
+      },
+      'casi_testati' = {
+        changeVariableColor('Swabs', var_descrip[var_descrip$field_name == 'casi_testati', "field_color"])
+        changeVariableColor('SwabsTitle', var_descrip[var_descrip$field_name == 'casi_testati', "field_color"])
       }
     )
     
     
+    
   })
   
-  
-  changeTxtColor <- function(id, rgb) {
-    session$sendCustomMessage(type = 'changeTxtColor',
-                              message = list('id' = id, 'color' = rgb))
-  }
-  
 }
+
 
 shinyApp(ui, server)
