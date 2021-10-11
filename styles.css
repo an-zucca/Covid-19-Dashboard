@@ -1,3 +1,20 @@
+
+.content {
+  padding: 0px;
+}
+
+#shiny-tab-info {
+  padding: 14px;
+}
+
+#shiny-tab-italy-tb {
+  padding: 7px;
+}
+
+.row {
+  margin: 0px;
+}
+
 .content-wrapper,
 .right-side {
   background-color:#000000;
@@ -46,6 +63,7 @@ p {
   border-top-width:1px;
   border-left-width:1px;
   border-right-width:1px;
+  margin: 0px;
 }
 
 .box-header {
@@ -54,10 +72,64 @@ p {
  padding:10px;
 }
 
-.col-sm-2 .box-body {
- text-align: center;
- color: white;
- font-size: 40px;
+.col-sm-2 {
+  padding: 7px;
+}
+
+.col-sm-2 .box {
+  height: 145px !important;
+}
+
+.col-sm-2 .box .box-header {
+  height: 25%;
+  padding: 10px;
+  color: #fff;
+}
+
+.col-sm-2 .box .box-body {
+  height: 75%;
+  padding: 0;
+  color: #fff;
+  text-align: center;
+}
+
+.col-sm-2 .box .box-body .first_row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 70%;
+}
+
+.col-sm-2 .box .box-body .snd_row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 30%;
+  background: #1a1a1a;
+}
+
+.col-sm-2 .load-container {
+    overflow: visible;
+}
+
+.col-sm-5 {
+  padding: 0;
+}
+
+.col-sm-7 {
+  padding: 0;
+}
+
+.col-sm-12 {
+  padding: 7px;
+}
+
+.col-sm-6 {
+  padding: 7px;
+}
+
+.box-body .row {
+  height: 100%;
 }
 
 .Burst {
@@ -65,7 +137,7 @@ p {
 }
 
 .nav-tabs-custom {
-    margin-bottom: 20px;
+    margin: 0px;
     background: #222222;
     border-radius: 3px;
     border-bottom: 1px solid #666666;
@@ -121,7 +193,7 @@ p {
 }
 
 .varText {
-  font-size:20px;
+  font-size:23px;
 }
 
 #deTable {
