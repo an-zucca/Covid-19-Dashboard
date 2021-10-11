@@ -13,7 +13,7 @@ Andrea Zucca<br/>
 [Linkedin](https://www.linkedin.com/in/andrea-zucca-62b6a6174/)
 _____________________________________________________________________________________________________________________________________________________
 # L'App
-L'app, qui alla sua prima versione, rappresenta il progetto di fine corso in "Data visualization, data analytics, data modeling".<br/>
+L'app nasce come progetto di fine corso in "Data visualization, data analytics, data modeling".<br/>
 Il corso è parte del Master universitario di II livello in "Big Data. Metodi statistici per la società della conoscenza" (A.A. 2019-2020). Dipartimento Scienze Statistiche. Università degli Studi di Roma "La Sapienza".
 _____________________________________________________________________________________________________________________________________________________
 
@@ -35,9 +35,3 @@ L'app trae spunto da:
 * [Dashboard ufficiale](http://opendatadpc.maps.arcgis.com/apps/opsdashboard/index.html#/b0c68bce2cce478eaac82fe38d4138b1) per l'Italia, mantenuta dal Dipartimento della Protezione civile. <br/> <br/>
 
 Il codice per generare l'app è reso [qui](https://github.com/zuccaandrea/Covid19App) disponibile.
-_____________________________________________________________________________________________________________________________________________________
-
-# Criticità e sviluppi futuri
-* Con il passare dei mesi, all'aumentare dei dati, lo spazio disponibile per la visualizzazione delle serie storiche potrebbe non essere sufficiente a una analisi visiva agile delle curve <br/>
-*Nonostante Plotly consenta di evidenziare porzioni di un grafico, può essere utile prevedere una visualizzazione a schermo intero degli stessi*
-* L'uso dei colori verde e rosso può aiutare a interpretare se un incremento o decremento, rispetto al giorno precedente, di una variabile del sommario, è un dato positivo o negativo nella lotta alla pandemia.
