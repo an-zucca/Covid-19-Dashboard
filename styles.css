@@ -1,14 +1,33 @@
-
 .content {
   padding: 0px;
 }
 
-#shiny-tab-info {
-  padding: 14px;
+a[href="#shiny-tab-italy-tb"] {
+  font-size: 15px;
 }
 
 #shiny-tab-italy-tb {
   padding: 7px;
+}
+
+a[href="#shiny-tab-info"] {
+  font-size: 15px;
+}
+
+#shiny-tab-info {
+  padding: 13px;
+}
+
+.infoClass p {
+  font-size: 15px;
+}
+
+.infoClass li {
+  font-size: 15px;
+}
+
+.infoClass a {
+  font-size: 15px;
 }
 
 .row {
@@ -72,12 +91,30 @@ p {
  padding:10px;
 }
 
+
 .col-sm-2 {
   padding: 7px;
+  width: 14.28%;
 }
 
+@media only screen and (max-width: 768px) {
+  /* For mobile phones: */
+  .col-sm-2 {
+    width: 100%;
+  }
+  
+  .FAV {
+    display: none !important;
+  }
+  .FRV {
+    display: block !important;
+  }
+}
+
+
+
 .col-sm-2 .box {
-  height: 145px !important;
+  height: 120px !important;
 }
 
 .col-sm-2 .box .box-header {
@@ -194,54 +231,6 @@ p {
 
 .varText {
   font-size:23px;
-}
-
-#deTable {
-  color: white;
-}
-
-#deTable .dataTables_length {
-  color:white;
-}
-
-#deTable .dataTables_filter {
-  color: white;
-}
-
-#deTable .dataTables_info {
-  color: white;
-}
-
-#deTable .dataTable tbody tr {
-    background-color: #222;
-}
-
-
-#deTable select {
-  color: black;
-}
-
-#deTable input {
-  color: black;
-}
-
-#deTable .noUi-background {
-    background: #222222;
-}
-
-
-#deTable .dataTable thead tr td {
-    color: #222222;
-}
-
-
-#deTable .paginate_button {
-  color: #fff !important;
-}
-
-
-#deTable .paginate_button.current {
-    color: #222 !important;
 }
 
 #infoMap {

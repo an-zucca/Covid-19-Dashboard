@@ -1,27 +1,63 @@
 Shiny.addCustomMessageHandler ('changeVariableColor',function (m) {
-                      var element = $('#'+m.id); // Find element to change color of
-                      element.css({'color': m.color}); // Change color of element
-              });
+  var element = $('#'+m.id);
+  element.css({'color': m.color});
+  });
 
+Shiny.addCustomMessageHandler ('changeFormTitle',function (m) {
+  document.getElementById(m.id).innerHTML = m.value;
+});
        
-Shiny.addCustomMessageHandler ('changeVarValue',function (m) {
-                      document.getElementById(m.id).innerHTML = m.value;
-              });
-              
-const array1 = ['CumCases','CumHealed','Deaths','NewPos','CurrCases','CurrHomeIs','CurrHospSympt', 'CurrIntCare', 'CurrHosp', 'Swabs'];
+Shiny.addCustomMessageHandler ('changeNavBarColor',function (m) {
+  var element = $('#tabset li');
+  element.css({'border-top-color' : 'transparent'});
+  var element = $('#tabset li.active');
+  element.css({'border-top-color' : m.color})
+});
 
-array1.forEach(myFunction);
+const array1 = ['Form1','Form2','Form3','Form4','Form5','Form6','Form7'];
 
-function myFunction(item, index) {
+array1.forEach(addListeners);
+
+function addListeners(item) {
+  
+  document.getElementById('rowVal' + item).addEventListener("mouseover", function(){
+    var abbrValue = document.getElementById(item + 'AbbrValue');
+    var rawValue = document.getElementById(item + 'RawValue');
+    
+    if (abbrValue != null && rawValue != null) {
+      abbrValue.style.display = 'none';
+      rawValue.style.display = 'block';
+    } 
+  });
+    
+  document.getElementById('rowVal' + item).addEventListener("mouseout", function(){
+    var abbrValue = document.getElementById(item + 'AbbrValue');
+    var rawValue = document.getElementById(item + 'RawValue');
+    
+    if (abbrValue != null && rawValue != null) {
+      abbrValue.style.display = 'block';
+      rawValue.style.display = 'none';
+    }
+  });
   
   document.getElementById('rowVar' + item).addEventListener("mouseover", function(){
-    document.getElementById(item + 'Inc').style.display = "none";
-    document.getElementById(item + 'PercInc').style.display = "block";
+    var IncValue = document.getElementById(item + 'Inc');
+    var PercIncValue = document.getElementById(item + 'PercInc');
+    
+    if (IncValue != null && PercIncValue != null) {
+      IncValue.style.display = 'none';
+      PercIncValue.style.display = 'block';
+    }
   });
     
   document.getElementById('rowVar' + item).addEventListener("mouseout", function(){
-    document.getElementById(item + 'PercInc').style.display = "none";
-    document.getElementById(item + 'Inc').style.display = "block";
+    var IncValue = document.getElementById(item + 'Inc');
+    var PercIncValue = document.getElementById(item + 'PercInc');
+    
+    if (IncValue != null && PercIncValue != null) {
+      IncValue.style.display = 'block';
+      PercIncValue.style.display = 'none';
+    }
   });
-  
+                 
 }
