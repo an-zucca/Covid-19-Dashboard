@@ -7,3 +7,5 @@
 ---
 
 Dashboard showing the progress of the Covid-19 pandemic in Italy.
+
+Visit the app [here](https://andreazucca.shinyapps.io/Covid19Dashboard/).
