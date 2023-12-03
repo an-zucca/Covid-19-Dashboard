@@ -7,6 +7,7 @@ require(shinycssloaders)
 require(dplyr)
 require(leaflet)
 require(scales)
+library(markdown)
 
 source("Script/UtilityFunctions.R")
 
