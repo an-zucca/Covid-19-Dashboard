@@ -9,8 +9,7 @@ output: html_document
 
 ![](img/user_andrea.jpg)
 
-Andrea Zucca<br/>
-[Linkedin](https://www.linkedin.com/in/andrea-zucca-62b6a6174/)
+[Andrea Zucca](https://www.linkedin.com/in/andrea-zucca-62b6a6174/)
 _____________________________________________________________________________________________________________________________________________________
 ## L'App
 L'app nasce come progetto del corso "Data visualization, data analytics, data modeling".<br/>
@@ -33,7 +32,7 @@ ________________________________________________________________________________
 ## Info e crediti
 L'app trae spunto da:
 
-* [Covid19App](https://statgroup19.shinyapps.io/Covid19App/), realizzata dal gruppo di ricerca [StatGroup-19](https://www.uniroma1.it/it/notizia/statgroup-19). 
-* [Dashboard ufficiale](https://opendatadpc.maps.arcgis.com/apps/dashboards/b0c68bce2cce478eaac82fe38d4138b1) per l'Italia, mantenuta dal Dipartimento della Protezione Civile. <br/> <br/>
+* [Covid19App](https://github.com/minmar94/StatGroup19-Covid19App), realizzata dal gruppo di ricerca [StatGroup-19](https://www.uniroma1.it/it/notizia/statgroup-19). 
+* [Dashboard ufficiale](https://mappe.protezionecivile.gov.it/it/mappe-e-dashboards-emergenze/dashboards-coronavirus/) per l'Italia, mantenuta dal Dipartimento della Protezione Civile. <br/> <br/>
 
-Il codice per generare l'app è reso [qui](https://github.com/zuccaandrea/Covid19App) disponibile.
+Il codice per generare l'app è reso [qui](https://github.com/zuccaandrea/Covid19Dashboard) disponibile.
