@@ -18,7 +18,7 @@ Il master, organizzato dal Dipartimento di Scienze Statistiche dell'Università 
 _____________________________________________________________________________________________________________________________________________________
 
 ## Funzionamento
-L'app, sviluppata in R, impiega [Shiny](https://shiny.rstudio.com/) e [Shiny Dashboard](https://rstudio.github.io/shinydashboard/).<br/>
+L'app, sviluppata in R, impiega [Shiny](https://shiny.posit.co/) e [Shiny Dashboard](https://rstudio.github.io/shinydashboard/).<br/>
 I grafici interativi sono realizzati utilizzando la libreria [Plotly](https://plotly.com/r/).<br/>
 La bubble map si avvale della libreria [Leaflet](https://rstudio.github.io/leaflet/).<br/>
 A ogni accesso l'app scarica e elabora i dati italiani sull'epidemia da Covid-19.
@@ -35,4 +35,4 @@ L'app trae spunto da:
 * [Covid19App](https://github.com/minmar94/StatGroup19-Covid19App), realizzata dal gruppo di ricerca [StatGroup-19](https://www.uniroma1.it/it/notizia/statgroup-19). 
 * [Dashboard ufficiale](https://mappe.protezionecivile.gov.it/it/mappe-e-dashboards-emergenze/dashboards-coronavirus/) per l'Italia, mantenuta dal Dipartimento della Protezione Civile. <br/> <br/>
 
-Il codice per generare l'app è reso [qui](https://github.com/zuccaandrea/Covid19Dashboard) disponibile.
+Il codice per generare l'app è reso [qui](https://github.com/an-zucca/covid-19-dashboard) disponibile.
