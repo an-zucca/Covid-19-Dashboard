@@ -1,10 +1,3 @@
----
-title: "Untitled"
-author: "Zucca"
-date: "30/8/2020"
-output: html_document
----
-
 ## Autore
 
 ![](img/user_andrea.jpg)
