@@ -10,4 +10,4 @@ Dashboard showing the progress of the Covid-19 pandemic in Italy.
 
 Visit the app [here](https://andreazucca.shinyapps.io/Covid19Dashboard/).
 
-https://github.com/zuccaandrea/Covid19Dashboard/assets/75362160/cec2d040-87ac-49e4-9a4b-cb70e7f3e71e
+https://github.com/an-zucca/covid-19-dashboard/assets/75362160/0dde5377-3532-40ea-9e4b-54c1644197f0
