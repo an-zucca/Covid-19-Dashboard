@@ -9,7 +9,6 @@ I dati sulla pandemia sono [condivisi](https://github.com/pcm-dpc/COVID-19) dal 
 La mappa che consente di selezionare le regioni di interesse sfrutta gli [shape file](https://www.istat.it/notizia/confini-delle-unita-amministrative-a-fini-statistici-al-1-gennaio-2018-2/) forniti dall’[Istat](https://www.istat.it/).
 
 ## Info e crediti
-
 L'app è stata sviluppata da [Andrea Zucca](https://www.linkedin.com/in/a-zucca).
 
 Trae ispirazione da:
