@@ -1,227 +1,196 @@
-require(shinydashboard)
-require(tidyverse)
-require(shiny)
-require(plotly)
-require(sf)
-require(shinycssloaders)
-require(dplyr)
-require(leaflet)
-require(scales)
+library(shinydashboard)
+library(tidyverse)
+library(shiny)
+library(plotly)
+library(sf)
+library(shinycssloaders)
+library(dplyr)
+library(leaflet)
+library(scales)
 library(markdown)
 
-source("Script/UtilityFunctions.R")
+source("resources/UtilityFunctions.R")
 
 sidebar <- dashboardSidebar(sidebarMenu(
   id = 'sidebar',
-  
-  menuItem("Italia",
-           tabName = "italy-tb",
-           icon = icon("gauge-high") ,
-           startExpanded = TRUE),
+  menuItem(
+    "Italia",
+    tabName = "dashboard",
+    icon = icon("dashboard"),
+    startExpanded = TRUE
+  ),
   div(
-    id = 'sidebar_it',
+    id = 'sidebar_dashboard',
     conditionalPanel(
-      "input.sidebar === 'italy-tb'",
-      uiOutput(outputId = "outRefDate"),
+      "input.sidebar === 'dashboard'",
+      uiOutput(outputId = "refDate"),
       tags$div(
         class = "form-group shiny-input-container",
-        tags$label(id = 'labelSelezionaRegioni', "Seleziona regioni:"),
-        withSpinner(plotlyOutput(outputId = "selMap", height = 300),
-                    size = 0.8),
+        tags$label("Seleziona regioni:"),
+        withSpinner(plotlyOutput(outputId = "regionsMap", height = 300), size = 0.8),
         tags$label(
-          id = 'infoMap',
+          id = 'regionsMapNote',
           '(*) doppio clic su un\'area vuota della mappa per selezionare tutte le regioni'
         )
       ),
       selectInput(
-        "selectedVar",
+        inputId = "variable",
         label = "Seleziona variabile:",
         choices = setNames(var_descrip$field_name, var_descrip$description)
       ),
       uiOutput(outputId = 'rescByResInput'),
       uiOutput(outputId = 'numR'),
-      checkboxInput("seriesByReg", label = "Decomponi serie per regione", value = F),
-      
+      checkboxInput("seriesByReg", label = "Decomponi serie per regione", value = F)
     )
-    
   ),
-  
   menuItem("Info", tabName = "info", icon = icon("info")),
-  
-  div(id = 'sidebar_info',
-      conditionalPanel("input.sidebar === 'info'"))
+  div(id = 'sidebar_info', conditionalPanel("input.sidebar === 'info'"))
 ))
+
+addSummaryBox <- function(id, var) {
+  id_box <- paste('box', id, sep = "-")
+  id_box_title <- paste('box', 'title', id, sep = "-")
+  id_first_row <- paste0('rowValForm', id)
+  id_first_ui <-  paste0('Form', id)
+  id_snd_row <- paste0('rowVarForm', id)
+  id_var_ui <-  paste0('varForm', id)
+  
+  summaryBox <- box(
+    id = id_box,
+    width = 2,
+    title = div(id = id_box_title, var_descrip[var_descrip$field_name == var, 'description']),
+    div(
+      class = 'first_row',
+      id = id_first_row,
+      withSpinner(uiOutput(id_first_ui), size = 0.7)
+    ),
+    div(
+      class = 'snd_row',
+      id = id_snd_row,
+      withSpinner(uiOutput(id_var_ui), size = 0.4)
+    )
+  )
+}
+
 
 
 body <- dashboardBody(
   skin = "black",
-  
-  includeCSS("styles.css"),
-  
+  includeCSS("css/styles.css"),
   tabItems(
-    tabItem(tabName = "info",
-            div(class = 'infoClass', style = "margin-top:-2em", includeMarkdown("info.md"))),
-    
     tabItem(
-      tabName = "italy-tb",
+      tabName = "info",
+      div(
+        class = 'infoClass',
+        style = "margin-top:-2em",
+        includeMarkdown("info.md")
+      )
+    ),
+    tabItem(
+      tabName = "dashboard",
       fluidRow(
+        addSummaryBox(id = 1, var = 'totale_casi'),
+        addSummaryBox(id = 2, var = 'dimessi_guariti'),
+        addSummaryBox(id = 3, var = 'deceduti'),
+        addSummaryBox(id = 4, var = 'totale_positivi'),
+        addSummaryBox(id = 5, var = 'totale_ospedalizzati'),
+        addSummaryBox(id = 6, var = 'positivi_tamponi'),
+        addSummaryBox(id = 7, var = 'tamponi')
+      ),
+      fluidRow(column(5, fluidRow(
         box(
-          width = 2,
-          title = div(id = 'Form1Title', var_descrip[var_descrip$field_name == 'totale_casi', 'description']),
-          fluidRow(
-            class = 'first_row',
-            id = "rowValForm1",
-            withSpinner(uiOutput("Form1"), size = 0.7)
+          id = 'mapBox',
+          width = 12,
+          title = '',
+          withSpinner(leafletOutput(outputId = "map", height = 850), size = 1)
+        )
+      )), column(
+        7, fluidRow(
+          box(
+            width = 6,
+            title = div(
+              class = "container-div",
+              div(class = "left-div", "Distribuzione totale casi"),
+              div(
+                class = "right-div",
+                actionButton(
+                  inputId = "pieChart",
+                  label = "",
+                  icon = icon("chart-pie"),
+                  disabled = TRUE
+                ),
+                actionButton(
+                  inputId = "hBarChart",
+                  label = "",
+                  icon = icon("chart-bar"),
+                  disabled = FALSE
+                ),
+                actionButton(
+                  inputId = "barChart",
+                  label = "",
+                  icon = icon("chart-simple"),
+                  disabled = FALSE
+                )
+              )
+            ),
+            withSpinner(plotlyOutput(outputId = "CumCasesDistr", height = 314), size = 1)
           ),
-          fluidRow(
-            class = 'snd_row',
-            id = 'rowVarForm1',
-            withSpinner(uiOutput("varForm1"), size = 0.4)
+          box(
+            width = 6,
+            title = div(
+              class = "container-div",
+              div(class = "left-div", "Distribuzione totale positivi"),
+              div(
+                class = "right-div",
+                actionButton(
+                  inputId = "pieChart1",
+                  label = "",
+                  icon = icon("chart-pie"),
+                  disabled = FALSE
+                ),
+                actionButton(
+                  inputId = "hBarChart1",
+                  label = "",
+                  icon = icon("chart-bar"),
+                  disabled = TRUE
+                ),
+                actionButton(
+                  inputId = "barChart1",
+                  label = "",
+                  icon = icon("chart-simple"),
+                  disabled = FALSE
+                )
+              )
+            ),
+            withSpinner(plotlyOutput(outputId = "CurrPosDistr", height = 314), size = 1)
           )
-        ),
-        box(
-          width = 2,
-          title = div(id = 'Form2Title', var_descrip[var_descrip$field_name == 'dimessi_guariti', 'description']),
-          fluidRow(
-            class = 'first_row',
-            id = "rowValForm2",
-            withSpinner(uiOutput("Form2"), size = 0.7)
-          ),
-          fluidRow(
-            class = 'snd_row',
-            id = 'rowVarForm2',
-            withSpinner(uiOutput("varForm2"), size = 0.4)
-          )
-        ),
-        box(
-          width = 2,
-          title = div(id = 'Form3Title', var_descrip[var_descrip$field_name == 'deceduti', 'description']),
-          fluidRow(
-            class = 'first_row',
-            id = "rowValForm3",
-            withSpinner(uiOutput("Form3"), size = 0.7)
-          ),
-          fluidRow(
-            class = 'snd_row',
-            id = 'rowVarForm3',
-            withSpinner(uiOutput("varForm3"), size = 0.4)
-          )
-        ),
-        box(
-          width = 2,
-          title = div(id = 'Form4Title', var_descrip[var_descrip$field_name == 'totale_positivi', 'description']),
-          fluidRow(
-            class = 'first_row',
-            id = "rowValForm4",
-            withSpinner(uiOutput("Form4"), size = 0.7)
-          ),
-          fluidRow(
-            class = 'snd_row',
-            id = 'rowVarForm4',
-            withSpinner(uiOutput("varForm4"), size = 0.4)
-          )
-        ),
-        box(
-          width = 2,
-          title = div(id = 'Form5Title', var_descrip[var_descrip$field_name == 'totale_ospedalizzati', 'description']),
-          fluidRow(
-            class = 'first_row',
-            id = "rowValForm5",
-            withSpinner(uiOutput("Form5"), size = 0.7)
-          ),
-          fluidRow(
-            class = 'snd_row',
-            id = 'rowVarForm5',
-            withSpinner(uiOutput("varForm5"), size = 0.4)
-          )
-        ),
-        box(
-          width = 2,
-          title = div(id = 'Form6Title', var_descrip[var_descrip$field_name == 'positivi_tamponi', 'description']),
-          fluidRow(
-            class = 'first_row',
-            id = "rowValForm6",
-            withSpinner(uiOutput("Form6"), size = 0.7)
-          ),
-          fluidRow(
-            class = 'snd_row',
-            id = 'rowVarForm6',
-            withSpinner(uiOutput("varForm6"), size = 0.4)
-          )
-        ),
-        box(
-          width = 2,
-          title = div(id = 'Form7Title', var_descrip[var_descrip$field_name == 'tamponi', 'description']),
-          fluidRow(
-            class = 'first_row',
-            id = "rowValForm7",
-            withSpinner(uiOutput("Form7"), size = 0.7)
-          ),
-          fluidRow(
-            class = 'snd_row',
-            id = 'rowVarForm7',
-            withSpinner(uiOutput("varForm7"), size = 0.4)
+        ), fluidRow(
+          tabBox(
+            width = 12,
+            id = "tabset",
+            selected = "Serie storica variabile selezionata",
+            tabPanel(
+              "Distribuzione totale casi",
+              withSpinner(
+                plotlyOutput(outputId = "timeCumCasesDistr", height = 410),
+                size = 1
+              )
+            ),
+            tabPanel("Distribuzione positivi", withSpinner(
+              plotlyOutput(outputId = "timePosDistrib", height = 410), size = 1
+            )),
+            tabPanel(
+              "Serie storica variabile selezionata",
+              withSpinner(plotlyOutput(outputId = "timeSeries", height = 410), size = 1)
+            )
+            
           )
         )
-      )
-      ,
-      fluidRow(column(5,
-                      fluidRow(
-                        box(
-                          width = 12,
-                          title = div(id = 'mapTitle', 'Mappa'),
-                          withSpinner(leafletOutput(outputId = "map", height = 806),
-                                      size = 1)
-                        )
-                      )),
-               column(
-                 7,
-                 fluidRow(
-                   box(
-                     width = 6,
-                     title = 'Distribuzione totale casi',
-                     withSpinner(plotlyOutput(outputId = "CumCasesDistr", height = 314),
-                                 size = 1)
-                   ),
-                   box(
-                     width = 6,
-                     title = 'Distribuzione attuali positivi',
-                     withSpinner(plotlyOutput(outputId = "CurrPosDistr", height = 314),
-                                 size = 1)
-                   )
-                 ),
-                 fluidRow(
-                   tabBox(
-                     width = 12,
-                     id = "tabset",
-                     selected = "Serie storica variabile selezionata",
-                     tabPanel(
-                       "Distribuzione totale casi",
-                       withSpinner(
-                         plotlyOutput(outputId = "timeCumCasesDistr", height = 410),
-                         size = 1
-                       )
-                     )
-                     ,
-                     tabPanel("Distribuzione positivi",
-                              withSpinner(
-                                plotlyOutput(outputId = "timePosDistrib", height = 410),
-                                size = 1
-                              ))
-                     ,
-                     tabPanel(
-                       "Serie storica variabile selezionata",
-                       withSpinner(plotlyOutput(outputId = "timeSeries", height = 410),
-                                   size = 1)
-                     )
-                     
-                   )
-                 )
-               )),
-      
+      )),
     )
   ),
   tags$script(src = "myscript.js"),
+  
 )
 
 ui <- dashboardPage(skin = 'blue',
@@ -230,71 +199,173 @@ ui <- dashboardPage(skin = 'blue',
                     body)
 
 server <- function(input, output, session) {
+  v <- reactiveValues(data = 'pC')
+  
+  observeEvent(input$pieChart, {
+    session$sendCustomMessage('disabledButton',
+                              message = list('id' = 'barChart', 'value' = FALSE))
+    session$sendCustomMessage('disabledButton',
+                              message = list('id' = 'hBarChart', 'value' = FALSE))
+    session$sendCustomMessage('disabledButton',
+                              message = list('id' = 'pieChart', 'value' = TRUE))
+    v$data <- 'pC'
+  })
+  
+  observeEvent(input$hBarChart, {
+    session$sendCustomMessage('disabledButton',
+                              message = list('id' = 'barChart', 'value' = FALSE))
+    session$sendCustomMessage('disabledButton',
+                              message = list('id' = 'hBarChart', 'value' = TRUE))
+    session$sendCustomMessage('disabledButton',
+                              message = list('id' = 'pieChart', 'value' = FALSE))
+    v$data <- 'hBC'
+  })
+  
+  observeEvent(input$barChart, {
+    session$sendCustomMessage('disabledButton',
+                              message = list('id' = 'barChart', 'value' = TRUE))
+    session$sendCustomMessage('disabledButton',
+                              message = list('id' = 'hBarChart', 'value' = FALSE))
+    session$sendCustomMessage('disabledButton',
+                              message = list('id' = 'pieChart', 'value' = FALSE))
+    
+    v$data <- 'bC'
+  })
+  
+  output$CumCasesDistr <- renderPlotly({
+    if (!is.null(v$data)) {
+      switch(v$data,
+             'bC' = {
+               draw_distr_bar_chart(summary = summary(), distrType = 'T', 'V')
+             },
+             'hBC' = {
+               draw_distr_bar_chart(summary = summary(), distrType = 'T', 'H')
+             },
+             'pC' = {
+               draw_donut_chart(summary = summary(), distrType = 'T')
+             })
+    }
+    else {
+      return ()
+    }
+  })
+  
+  v2 <- reactiveValues(data = 'hBC')
+  
+  observeEvent(input$pieChart1, {
+    session$sendCustomMessage('disabledButton',
+                              message = list('id' = 'barChart1', 'value' = FALSE))
+    session$sendCustomMessage('disabledButton',
+                              message = list('id' = 'hBarChart1', 'value' = FALSE))
+    session$sendCustomMessage('disabledButton',
+                              message = list('id' = 'pieChart1', 'value' = TRUE))
+    v2$data <- 'pC'
+  })
+  
+  observeEvent(input$hBarChart1, {
+    session$sendCustomMessage('disabledButton',
+                              message = list('id' = 'barChart1', 'value' = FALSE))
+    session$sendCustomMessage('disabledButton',
+                              message = list('id' = 'hBarChart1', 'value' = TRUE))
+    session$sendCustomMessage('disabledButton',
+                              message = list('id' = 'pieChart1', 'value' = FALSE))
+    v2$data <- 'hBC'
+  })
+  
+  observeEvent(input$barChart1, {
+    session$sendCustomMessage('disabledButton',
+                              message = list('id' = 'barChart1', 'value' = TRUE))
+    session$sendCustomMessage('disabledButton',
+                              message = list('id' = 'hBarChart1', 'value' = FALSE))
+    session$sendCustomMessage('disabledButton',
+                              message = list('id' = 'pieChart1', 'value' = FALSE))
+    
+    v2$data <- 'bC'
+  })
+  
+  output$CurrPosDistr <- renderPlotly({
+    if (!is.null(v2$data)) {
+      switch(v2$data,
+             'bC' = {
+               draw_distr_bar_chart(summary = summary(), distrType = 'P', 'V')
+             },
+             'hBC' = {
+               draw_distr_bar_chart(summary = summary(), distrType = 'P', 'H')
+             },
+             'pC' = {
+               draw_donut_chart(summary = summary(), distrType = 'P')
+             })
+    }
+    else {
+      return ()
+    }
+  })
+  
   get_rend_ui <- function(idUi, data, variab, type) {
-    switch(type,
-           'val' = {
-             renderUI(div(
-               class = 'valText',
-               div(
-                 class = 'FAV',
-                 id = paste0(idUi, 'AbbrValue'),
-                 data()[['adds']][[1]][[variab]][[2]]),
-               div(
-                 class = 'FRV',
-                 id = paste0(idUi, 'RawValue'),
-                 data()[['adds']][[1]][[variab]][[1]],
-                 style = paste0('display: none;')
-               )
-             ))
-           },
-           'var' = {
-             renderUI(div(
-               class = 'varText',
-               div(
-                 id = paste0(idUi, 'Inc'),
-                 data()[['adds']][[1]][[variab]][[3]],
-                 style = data()[['adds']][[1]][[variab]][[6]]
-               ),
-               div(
-                 id = paste0(idUi, 'PercInc'),
-                 data()[['adds']][[1]][[variab]][[5]],
-                 style = paste0(data()[['adds']][[1]][[variab]][[6]], ';', 'display: none;')
-               )
-             ))
-           })
+    res <- switch(type, 'val' = {
+      renderUI(div(
+        class = 'valText',
+        div(
+          class = 'FAV',
+          id = paste0(idUi, 'AbbrValue'),
+          data()[['adds']][[1]][[variab]][[2]]
+        ),
+        div(
+          class = 'FRV',
+          id = paste0(idUi, 'RawValue'),
+          data()[['adds']][[1]][[variab]][[1]],
+          style = paste0('display: none;')
+        )
+      ))
+    }, 'var' = {
+      renderUI(div(
+        class = 'in_row',
+        div(
+          class = 'varText',
+          id = paste0(idUi, 'Inc'),
+          data()[['adds']][[1]][[variab]][[3]],
+          style = paste0('color:', data()[['adds']][[1]][[variab]][[6]])
+        ),
+        div(
+          class = 'varText',
+          id = paste0(idUi, 'PercInc'),
+          data()[['adds']][[1]][[variab]][[5]],
+          style = paste0('color:', data()[['adds']][[1]][[variab]][[6]], ';', 'display: none;')
+        ),
+        style = paste0('background-color:', data()[['adds']][[1]][[variab]][[7]], ';')
+      ))
+    })
   }
   
   ## Load general data
   sel_reg <- reactiveVal(regions)
   
   reg_data <- reactive({
-    load_reg_data_add(path_r = 'https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-regioni/dpc-covid19-ita-regioni.csv', 
-                      path_p = 'popolazione_residente_2020-2022.csv')
+    load_reg_data_add(path_r = 'https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-regioni/dpc-covid19-ita-regioni.csv', path_p = 'resources/popolazione_residente_2020-2022.csv')
   })
   
   summary <- reactive({
-    req(input$inRefDate)
+    req(input$referenceDate)
     load_summary(
       regData = reg_data(),
       selRegs = sel_reg(),
-      refDate = input$inRefDate
+      refDate = input$referenceDate
     )
   })
   
   summary_per_reg <- reactive({
-    req(input$inRefDate)
-    load_summary_reg(regData = reg_data(),
-                     refDate = input$inRefDate)
+    req(input$referenceDate)
+    load_summary_reg(regData = reg_data(), refDate = input$referenceDate)
   })
   
   ## Sidebar
   
   # Data selector
   
-  output$outRefDate <- renderUI({
+  output$refDate <- renderUI({
     req(reg_data())
     dateInput(
-      inputId = 'inRefDate',
+      inputId = 'referenceDate',
       label = 'Data di riferimento:',
       min = min(reg_data()$data),
       max = max(reg_data()$data),
@@ -306,10 +377,10 @@ server <- function(input, output, session) {
   # Map selector
   
   sf_reg <- reactive({
-    load_map_reg(path = 'it_sf/Limiti01012022_g/Reg01012022_g/Reg01012022_g_WGS84.shp')
+    load_map_reg(path = 'resources/it_sf/Limiti01012022_g/Reg01012022_g/Reg01012022_g_WGS84.shp')
   })
   
-  output$selMap <- renderPlotly({
+  output$regionsMap <- renderPlotly({
     plot_ly(
       sf_reg(),
       type = 'scatter',
@@ -355,15 +426,14 @@ server <- function(input, output, session) {
     cols <-
       ifelse(sf_reg()$DEN_REG %in% sel_reg(), "#00ff00", '#222222')
     
-    plotlyProxy("selMap", session) %>%
+    plotlyProxy("regionsMap", session) %>%
       plotlyProxyInvoke("restyle", list(fillcolor = cols))
     
   })
   
   observeEvent(event_data("plotly_doubleclick", "M"), {
     sel_reg(regions)
-    
-    plotlyProxy("selMap", session) %>%
+    plotlyProxy("regionsMap", session) %>%
       plotlyProxyInvoke("restyle", list(fillcolor = rep('#00ff00', length(regions))))
     
   })
@@ -374,9 +444,9 @@ server <- function(input, output, session) {
   numResDef <- reactiveVal(value = 10000)
   resByResDef <- reactiveVal(value = F)
   
-  observeEvent(input$selectedVar, {
+  observeEvent(input$variable, {
     req(caricaCBI)
-    if (input$selectedVar != 'positivi_tamponi') {
+    if (input$variable != 'positivi_tamponi') {
       if (caricaCBI() == T) {
         output$rescByResInput <- renderUI({
           checkboxInput(inputId = "rescByRes",
@@ -430,7 +500,6 @@ server <- function(input, output, session) {
     }
   })
   
-  
   ## Summary Forms
   
   responForm1 <- reactiveVal('')
@@ -441,7 +510,7 @@ server <- function(input, output, session) {
   responForm6 <- reactiveVal('')
   responForm7 <- reactiveVal('')
   
-  observeEvent(input$selectedVar, {
+  observeEvent(input$variable, {
     if (responForm1() == '') {
       output$Form1 <-
         get_rend_ui('Form1', summary, 'totale_casi', 'val')
@@ -451,19 +520,22 @@ server <- function(input, output, session) {
       responForm1('totale_casi')
       
     } else {
-      if (input$selectedVar == 'totale_casi' && responForm1() != 'totale_casi') {
-        changeFormTitle('Form1Title', var_descrip[var_descrip$field_name == 'totale_casi', 'description'])
+      if (input$variable == 'totale_casi' &&
+          responForm1() != 'totale_casi') {
+        changeFormTitle('box-title-1', var_descrip[var_descrip$field_name == 'totale_casi', 'description'])
         
         output$Form1 <-
           get_rend_ui('Form1', summary, 'totale_casi', 'val')
+        
         output$varForm1 <-
           get_rend_ui('Form1', summary, 'totale_casi', 'var')
         
         responForm1('totale_casi')
       }
       
-      if (input$selectedVar == 'nuovi_positivi' && responForm1() != 'nuovi_positivi') {
-        changeFormTitle('Form1Title', var_descrip[var_descrip$field_name == 'nuovi_positivi', 'description'])
+      if (input$variable == 'nuovi_positivi' &&
+          responForm1() != 'nuovi_positivi') {
+        changeFormTitle('box-title-1', var_descrip[var_descrip$field_name == 'nuovi_positivi', 'description'])
         
         output$Form1 <-
           get_rend_ui('Form1', summary, 'nuovi_positivi', 'val')
@@ -477,7 +549,7 @@ server <- function(input, output, session) {
     
   })
   
-  observeEvent(input$selectedVar, {
+  observeEvent(input$variable, {
     if (responForm2() == '') {
       output$Form2 <-
         get_rend_ui('Form2', summary, 'dimessi_guariti', 'val')
@@ -487,8 +559,9 @@ server <- function(input, output, session) {
       responForm2('dimessi_guariti')
       
     } else {
-      if (input$selectedVar == 'dimessi_guariti' && responForm2() != 'dimessi_guariti') {
-        changeFormTitle('Form2Title', var_descrip[var_descrip$field_name == 'dimessi_guariti', 'description'])
+      if (input$variable == 'dimessi_guariti' &&
+          responForm2() != 'dimessi_guariti') {
+        changeFormTitle('box-title-2', var_descrip[var_descrip$field_name == 'dimessi_guariti', 'description'])
         
         output$Form2 <-
           get_rend_ui('Form2', summary, 'dimessi_guariti', 'val')
@@ -498,8 +571,9 @@ server <- function(input, output, session) {
         responForm2('dimessi_guariti')
       }
       
-      if (input$selectedVar == 'nuovi_dimessi_guariti' && responForm2() != 'nuovi_dimessi_guariti') {
-        changeFormTitle('Form2Title', var_descrip[var_descrip$field_name == 'nuovi_dimessi_guariti', 'description'])
+      if (input$variable == 'nuovi_dimessi_guariti' &&
+          responForm2() != 'nuovi_dimessi_guariti') {
+        changeFormTitle('box-title-2', var_descrip[var_descrip$field_name == 'nuovi_dimessi_guariti', 'description'])
         
         output$Form2 <-
           get_rend_ui('Form2', summary, 'nuovi_dimessi_guariti', 'val')
@@ -513,7 +587,7 @@ server <- function(input, output, session) {
     
   })
   
-  observeEvent(input$selectedVar, {
+  observeEvent(input$variable, {
     if (responForm3() == '') {
       output$Form3 <-
         get_rend_ui('Form3', summary, 'deceduti', 'val')
@@ -523,8 +597,9 @@ server <- function(input, output, session) {
       responForm3('deceduti')
       
     } else {
-      if (input$selectedVar == 'deceduti' && responForm3() != 'deceduti') {
-        changeFormTitle('Form3Title', var_descrip[var_descrip$field_name == 'deceduti', 'description'])
+      if (input$variable == 'deceduti' &&
+          responForm3() != 'deceduti') {
+        changeFormTitle('box-title-3', var_descrip[var_descrip$field_name == 'deceduti', 'description'])
         
         output$Form3 <-
           get_rend_ui('Form3', summary, 'deceduti', 'val')
@@ -534,8 +609,9 @@ server <- function(input, output, session) {
         responForm3('deceduti')
       }
       
-      if (input$selectedVar == 'nuovi_deceduti' && responForm3() != 'nuovi_deceduti') {
-        changeFormTitle('Form3Title', var_descrip[var_descrip$field_name == 'nuovi_deceduti', 'description'])
+      if (input$variable == 'nuovi_deceduti' &&
+          responForm3() != 'nuovi_deceduti') {
+        changeFormTitle('box-title-3', var_descrip[var_descrip$field_name == 'nuovi_deceduti', 'description'])
         
         output$Form3 <-
           get_rend_ui('Form3', summary, 'nuovi_deceduti', 'val')
@@ -549,7 +625,7 @@ server <- function(input, output, session) {
     
   })
   
-  observeEvent(input$selectedVar, {
+  observeEvent(input$variable, {
     if (responForm4() == '') {
       output$Form4 <-
         get_rend_ui('Form4', summary, 'totale_positivi', 'val')
@@ -557,12 +633,10 @@ server <- function(input, output, session) {
         get_rend_ui('Form4', summary, 'totale_positivi', 'var')
       
       responForm4('totale_positivi')
-      
     }
-    
   })
   
-  observeEvent(input$selectedVar, {
+  observeEvent(input$variable, {
     if (responForm5() == '') {
       output$Form5 <-
         get_rend_ui('Form5', summary, 'totale_ospedalizzati', 'val')
@@ -572,8 +646,9 @@ server <- function(input, output, session) {
       responForm5('totale_ospedalizzati')
       
     } else {
-      if (input$selectedVar == 'totale_ospedalizzati' && responForm5() != 'totale_ospedalizzati') {
-        changeFormTitle('Form5Title', var_descrip[var_descrip$field_name == 'totale_ospedalizzati', 'description'])
+      if (input$variable == 'totale_ospedalizzati' &&
+          responForm5() != 'totale_ospedalizzati') {
+        changeFormTitle('box-title-5', var_descrip[var_descrip$field_name == 'totale_ospedalizzati', 'description'])
         
         output$Form5 <-
           get_rend_ui('Form5', summary, 'totale_ospedalizzati', 'val')
@@ -583,8 +658,9 @@ server <- function(input, output, session) {
         responForm5('totale_ospedalizzati')
       }
       
-      if (input$selectedVar == 'isolamento_domiciliare' && responForm5() != 'isolamento_domiciliare') {
-        changeFormTitle('Form5Title', var_descrip[var_descrip$field_name == 'isolamento_domiciliare', 'description'])
+      if (input$variable == 'isolamento_domiciliare' &&
+          responForm5() != 'isolamento_domiciliare') {
+        changeFormTitle('box-title-5', var_descrip[var_descrip$field_name == 'isolamento_domiciliare', 'description'])
         
         output$Form5 <-
           get_rend_ui('Form5', summary, 'isolamento_domiciliare', 'val')
@@ -594,8 +670,9 @@ server <- function(input, output, session) {
         responForm5('isolamento_domiciliare')
       }
       
-      if (input$selectedVar == 'ricoverati_con_sintomi' && responForm5() != 'ricoverati_con_sintomi') {
-        changeFormTitle('Form5Title', var_descrip[var_descrip$field_name == 'ricoverati_con_sintomi', 'description'])
+      if (input$variable == 'ricoverati_con_sintomi' &&
+          responForm5() != 'ricoverati_con_sintomi') {
+        changeFormTitle('box-title-5', var_descrip[var_descrip$field_name == 'ricoverati_con_sintomi', 'description'])
         
         output$Form5 <-
           get_rend_ui('Form5', summary, 'ricoverati_con_sintomi', 'val')
@@ -605,8 +682,9 @@ server <- function(input, output, session) {
         responForm5('ricoverati_con_sintomi')
       }
       
-      if (input$selectedVar == 'terapia_intensiva' && responForm5() != 'terapia_intensiva') {
-        changeFormTitle('Form5Title', var_descrip[var_descrip$field_name == 'terapia_intensiva', 'description'])
+      if (input$variable == 'terapia_intensiva' &&
+          responForm5() != 'terapia_intensiva') {
+        changeFormTitle('box-title-5', var_descrip[var_descrip$field_name == 'terapia_intensiva', 'description'])
         
         output$Form5 <-
           get_rend_ui('Form5', summary, 'terapia_intensiva', 'val')
@@ -620,7 +698,7 @@ server <- function(input, output, session) {
     
   })
   
-  observeEvent(input$selectedVar, {
+  observeEvent(input$variable, {
     if (responForm6() == '') {
       output$Form6 <-
         get_rend_ui('Form6', summary, 'positivi_tamponi', 'val')
@@ -633,9 +711,8 @@ server <- function(input, output, session) {
     
   })
   
-  observeEvent(input$selectedVar, {
+  observeEvent(input$variable, {
     if (responForm7() == '') {
-
       output$Form7 <-
         get_rend_ui('Form7', summary, 'tamponi', 'val')
       output$varForm7 <-
@@ -644,8 +721,8 @@ server <- function(input, output, session) {
       responForm7('tamponi')
       
     } else {
-      if (input$selectedVar == 'tamponi' && responForm7() != 'tamponi') {
-        changeFormTitle('Form7Title', var_descrip[var_descrip$field_name == 'tamponi', 'description'])
+      if (input$variable == 'tamponi' && responForm7() != 'tamponi') {
+        changeFormTitle('box-title-7', var_descrip[var_descrip$field_name == 'tamponi', 'description'])
         
         output$Form7 <-
           get_rend_ui('Form7', summary, 'tamponi', 'val')
@@ -655,8 +732,9 @@ server <- function(input, output, session) {
         responForm7('tamponi')
       }
       
-      if (input$selectedVar == 'nuovi_tamponi' && responForm7() != 'nuovi_tamponi') {
-        changeFormTitle('Form7Title', var_descrip[var_descrip$field_name == 'nuovi_tamponi', 'description'])
+      if (input$variable == 'nuovi_tamponi' &&
+          responForm7() != 'nuovi_tamponi') {
+        changeFormTitle('box-title-7', var_descrip[var_descrip$field_name == 'nuovi_tamponi', 'description'])
         
         output$Form7 <-
           get_rend_ui('Form7', summary, 'nuovi_tamponi', 'val')
@@ -673,10 +751,10 @@ server <- function(input, output, session) {
   ## Bubble map
   
   filteredData <- reactive({
-    if (input$selectedVar == 'positivi_tamponi') {
+    if (input$variable == 'positivi_tamponi') {
       get_map_data(
         regSummary = summary_per_reg(),
-        selVar = input$selectedVar,
+        selVar = input$variable,
         selRegs = sel_reg()
       )
     } else {
@@ -685,7 +763,7 @@ server <- function(input, output, session) {
           if (!is.null(input$numRes)) {
             get_map_data(
               regSummary = summary_per_reg(),
-              selVar = input$selectedVar,
+              selVar = input$variable,
               selRegs = sel_reg(),
               resResc = input$rescByRes,
               resNumb = input$numRes
@@ -694,7 +772,7 @@ server <- function(input, output, session) {
         } else {
           get_map_data(
             regSummary = summary_per_reg(),
-            selVar = input$selectedVar,
+            selVar = input$variable,
             selRegs = sel_reg()
           )
         }
@@ -710,77 +788,83 @@ server <- function(input, output, session) {
   observe({
     filteredData = filteredData()
     
-    if(!is.null(filteredData)) {
-    
-    labs <- lapply(seq(nrow(filteredData)), function(i) {
-      if(input$selectedVar == 'positivi_tamponi') {
-        paste0(
-          '<b>', filteredData[i, "denominazione_regione"], '</b>', '</br>',
-          filteredData[i, "valore_base"], '</br>',
-          paste(sep = ' ', filteredData[i, "valore_incr"], 'risp. a ieri'), '</br>'
-        )
-      } else {
-        if (input$rescByRes) {
+    if (!is.null(filteredData)) {
+      labs <- lapply(seq(nrow(filteredData)), function(i) {
+        if (input$variable == 'positivi_tamponi') {
           paste0(
-            '<b>', filteredData[i, "denominazione_regione"], '</b>', '</br>',
-                   filteredData[i, "valore_base"], '</br>',
-                   paste(sep = ' ','su', format(input$numRes, big.mark = ".", decimal.mark = ','), 'residenti'), '</br>')
+            '<b>',
+            filteredData[i, "denominazione_regione"],
+            '</b>',
+            '</br>',
+            filteredData[i, "valore_base"],
+            '</br>',
+            paste(sep = ' ', filteredData[i, "valore_incr"], 'risp. a ieri'),
+            '</br>'
+          )
         } else {
-          paste0(
-            '<b>', filteredData[i, "denominazione_regione"], '</b>', '</br>',
-                   filteredData[i, "valore_base"], '</br>',
-                   paste(sep = ' ', filteredData[i, "valore_incr"], 'risp. a ieri'), '</br>',
-                   paste0('(', filteredData[i, "valore_incr_perc"], ')'), '</br>'
-          )
+          if (input$rescByRes) {
+            paste0(
+              '<b>',
+              filteredData[i, "denominazione_regione"],
+              '</b>',
+              '</br>',
+              filteredData[i, "valore_base"],
+              '</br>',
+              paste(
+                sep = ' ',
+                'su',
+                format(
+                  input$numRes,
+                  big.mark = ".",
+                  decimal.mark = ','
+                ),
+                'residenti'
+              ),
+              '</br>'
+            )
+          } else {
+            paste0(
+              '<b>',
+              filteredData[i, "denominazione_regione"],
+              '</b>',
+              '</br>',
+              filteredData[i, "valore_base"],
+              '</br>',
+              paste(sep = ' ', filteredData[i, "valore_incr"], 'risp. a ieri'),
+              '</br>',
+              paste0('(', filteredData[i, "valore_incr_perc"], ')'),
+              '</br>'
+            )
+          }
         }
-      }
-    })
-    
-    leafletProxy("map", data = filteredData) %>%
-      clearShapes() %>%
-      addCircles(
-        lng = ~ long,
-        lat = ~ lat,
-        radius = ~ circle_radius,
-        weight = 1,
-        color = "#666666",
-        fillColor = var_descrip[var_descrip$field_name == input$selectedVar, "field_color"],
-        fillOpacity = 0.6,
-        label = lapply(labs, htmltools::HTML),
-        labelOptions = labelOptions(
-          style = list(
-            "font-size" = "12px"
-          )
+      })
+      
+      leafletProxy("map", data = filteredData) %>%
+        clearShapes() %>%
+        addCircles(
+          lng = ~ long,
+          lat = ~ lat,
+          radius = ~ circle_radius,
+          weight = 1,
+          color = "#666666",
+          fillColor = var_descrip[var_descrip$field_name == input$variable, "field_color"],
+          fillOpacity = 0.6,
+          label = lapply(labs, htmltools::HTML),
+          labelOptions = labelOptions(style = list("font-size" = "12px"))
         )
-      )
     }
-  })
-  
-  ## Bar charts
-  
-  output$CumCasesDistr <- renderPlotly({
-   draw_distr_chart(
-      summary = summary(),
-      distrType = 'T'
-    )
-  })
-  
-  output$CurrPosDistr <- renderPlotly({
-    draw_distr_chart(
-      summary = summary(),
-      distrType = 'P'
-    )
   })
   
   ## Tab set
   
   observeEvent(input$tabset, {
-    changeNavBarColor(var_descrip[var_descrip$field_name == input$selectedVar, "field_color"])
+    changeNavBarColor(var_descrip[var_descrip$field_name == input$variable, "field_color"])
   })
   
   output$timeCumCasesDistr <- renderPlotly({
     draw_distr_time_chart(
       regData = reg_data(),
+      refDate = input$referenceDate,
       selRegs = sel_reg(),
       distrType = 'T'
     )
@@ -789,6 +873,7 @@ server <- function(input, output, session) {
   output$timePosDistrib <- renderPlotly({
     draw_distr_time_chart(
       regData = reg_data(),
+      refDate = input$referenceDate,
       selRegs = sel_reg(),
       distrType = 'P'
     )
@@ -797,16 +882,21 @@ server <- function(input, output, session) {
   # V time series
   
   toListen <- reactive({
-    list(input$selectedVar, input$rescByRes, input$numRes)
+    list(input$variable,
+         input$rescByRes,
+         input$numRes,
+         input$referenceDate)
   })
   
   observeEvent(toListen(), {
-    if (input$selectedVar == 'positivi_tamponi') {
+    req(input$referenceDate)
+    if (input$variable == 'positivi_tamponi') {
       output$timeSeries <- renderPlotly({
         draw_time_series_plot(
           regData = reg_data(),
+          refDate = input$referenceDate,
           selRegs = sel_reg(),
-          selVar = input$selectedVar,
+          selVar = input$variable,
           serByReg = input$seriesByReg
         )
       })
@@ -816,8 +906,9 @@ server <- function(input, output, session) {
           output$timeSeries <- renderPlotly({
             draw_time_series_plot(
               regData = reg_data(),
+              refDate = input$referenceDate,
               selRegs = sel_reg(),
-              selVar = input$selectedVar,
+              selVar = input$variable,
               serByReg = input$seriesByReg
             )
           })
@@ -826,8 +917,9 @@ server <- function(input, output, session) {
           output$timeSeries <- renderPlotly({
             draw_time_series_plot(
               regData = reg_data(),
+              refDate = input$referenceDate,
               selRegs = sel_reg(),
-              selVar = input$selectedVar,
+              selVar = input$variable,
               serByReg = input$seriesByReg,
               resResc = input$rescByRes,
               numRes = input$numRes
@@ -841,113 +933,161 @@ server <- function(input, output, session) {
   ## JS calls
   
   changeVariableColor <- function(id, rgb) {
-    session$sendCustomMessage('changeVariableColor',
-                              message = list('id' = id, 'color' = rgb))
+    session$sendCustomMessage('changeVariableColor', message = list('id' = id, 'color' = rgb))
+  }
+  
+  printHelloWorld <- function(id, rgb) {
+    session$sendCustomMessage('printHelloWorld', message = list('id' = id, 'color' = rgb))
   }
   
   changeFormTitle <- function(id, value) {
-    session$sendCustomMessage('changeFormTitle',
-                              message = list('id' = id, 'value' = value))
+    session$sendCustomMessage('changeFormTitle', message = list('id' = id, 'value' = value))
   }
   
   changeNavBarColor <- function(rgb) {
-    session$sendCustomMessage('changeNavBarColor',
-                              message = list('color' = rgb))
+    session$sendCustomMessage('changeNavBarColor', message = list('color' = rgb))
   }
   
-  observeEvent(input$selectedVar, {
-    changeVariableColor('Form1', '#FFFFFF')
-    changeVariableColor('Form1Title', '#FFFFFF')
+  changeBorderColor <- function(id, rgb) {
+    session$sendCustomMessage('changeBorderColor', message = list('id' = id, 'color' = rgb))
+  }
+  
+  changeBgColor <- function(id, rgb) {
+    session$sendCustomMessage('changeBgColor', message = list('id' = id, 'color' = rgb))
+  }
+  
+  
+  
+  observeEvent(input$variable, {
+    default_color <- '#000'
+    default_box_border_color <- '#D2D6DE'
+    changeVariableColor('Form1', default_color)
+    changeVariableColor('box-title-1', default_color)
+    changeBorderColor('box-1', default_box_border_color)
     
-    changeVariableColor('Form2', '#FFFFFF')
-    changeVariableColor('Form2Title', '#FFFFFF')
+    changeVariableColor('Form2', default_color)
+    changeVariableColor('box-title-2', default_color)
+    changeBorderColor('box-2', default_box_border_color)
     
-    changeVariableColor('Form3', '#FFFFFF')
-    changeVariableColor('Form3Title', '#FFFFFF')
+    changeVariableColor('Form3', default_color)
+    changeVariableColor('box-title-3', default_color)
+    changeBorderColor('box-3', default_box_border_color)
     
-    changeVariableColor('Form4', '#FFFFFF')
-    changeVariableColor('Form4Title', '#FFFFFF')
+    changeVariableColor('Form4', default_color)
+    changeVariableColor('box-title-4', default_color)
+    changeBorderColor('box-4', default_box_border_color)
     
-    changeVariableColor('Form5', '#FFFFFF')
-    changeVariableColor('Form5Title', '#FFFFFF')
+    changeVariableColor('Form5', default_color)
+    changeVariableColor('box-title-5', default_color)
+    changeBorderColor('box-5', default_box_border_color)
     
-    changeVariableColor('Form6', '#FFFFFF')
-    changeVariableColor('Form6Title', '#FFFFFF')
+    changeVariableColor('Form6', default_color)
+    changeVariableColor('box-title-6', default_color)
+    changeBorderColor('box-6', default_box_border_color)
     
-    changeVariableColor('Form7', '#FFFFFF')
-    changeVariableColor('Form7Title', '#FFFFFF')
+    changeVariableColor('Form7', default_color)
+    changeVariableColor('box-title-7', default_color)
+    changeBorderColor('box-7', default_box_border_color)
     
     switch(
-      input$selectedVar,
+      input$variable,
       'totale_casi' = {
         changeVariableColor('Form1', var_descrip[var_descrip$field_name == 'totale_casi', "field_color"])
-        changeVariableColor('Form1Title', var_descrip[var_descrip$field_name == 'totale_casi', "field_color"])
+        changeVariableColor('box-title-1', var_descrip[var_descrip$field_name == 'totale_casi', "field_color"])
         changeNavBarColor(var_descrip[var_descrip$field_name == 'totale_casi', "field_color"])
+        changeBorderColor('box-1', var_descrip[var_descrip$field_name == 'totale_casi', "field_color"])
+        changeBorderColor('mapBox', var_descrip[var_descrip$field_name == 'totale_casi', "field_color"])
       },
       'nuovi_positivi' = {
         changeVariableColor('Form1', var_descrip[var_descrip$field_name == 'nuovi_positivi', "field_color"])
-        changeVariableColor('Form1Title', var_descrip[var_descrip$field_name == 'nuovi_positivi', "field_color"])
+        changeVariableColor('box-title-1', var_descrip[var_descrip$field_name == 'nuovi_positivi', "field_color"])
         changeNavBarColor(var_descrip[var_descrip$field_name == 'nuovi_positivi', "field_color"])
+        changeBorderColor('box-1', var_descrip[var_descrip$field_name == 'nuovi_positivi', "field_color"])
+        changeBorderColor('mapBox', var_descrip[var_descrip$field_name == 'nuovi_positivi', "field_color"])
       },
       'dimessi_guariti' = {
         changeVariableColor('Form2', var_descrip[var_descrip$field_name == 'dimessi_guariti', "field_color"])
-        changeVariableColor('Form2Title', var_descrip[var_descrip$field_name == 'dimessi_guariti', "field_color"])
+        changeVariableColor('box-title-2', var_descrip[var_descrip$field_name == 'dimessi_guariti', "field_color"])
         changeNavBarColor(var_descrip[var_descrip$field_name == 'dimessi_guariti', "field_color"])
+        changeBorderColor('box-2', var_descrip[var_descrip$field_name == 'dimessi_guariti', "field_color"])
+        changeBorderColor('mapBox', var_descrip[var_descrip$field_name == 'dimessi_guariti', "field_color"])
       },
       'nuovi_dimessi_guariti' = {
         changeVariableColor('Form2', var_descrip[var_descrip$field_name == 'nuovi_dimessi_guariti', "field_color"])
-        changeVariableColor('Form2Title', var_descrip[var_descrip$field_name == 'nuovi_dimessi_guariti', "field_color"])
+        changeVariableColor('box-title-2', var_descrip[var_descrip$field_name == 'nuovi_dimessi_guariti', "field_color"])
         changeNavBarColor(var_descrip[var_descrip$field_name == 'nuovi_dimessi_guariti', "field_color"])
+        changeBorderColor('box-2', var_descrip[var_descrip$field_name == 'nuovi_dimessi_guariti', "field_color"])
+        changeBorderColor('mapBox', var_descrip[var_descrip$field_name == 'nuovi_dimessi_guariti', "field_color"])
       },
       'deceduti' = {
         changeVariableColor('Form3', var_descrip[var_descrip$field_name == 'deceduti', "field_color"])
-        changeVariableColor('Form3Title', var_descrip[var_descrip$field_name == 'deceduti', "field_color"])
+        changeVariableColor('box-title-3', var_descrip[var_descrip$field_name == 'deceduti', "field_color"])
         changeNavBarColor(var_descrip[var_descrip$field_name == 'deceduti', "field_color"])
+        changeBorderColor('box-3', var_descrip[var_descrip$field_name == 'deceduti', "field_color"])
+        changeBorderColor('mapBox', var_descrip[var_descrip$field_name == 'deceduti', "field_color"])
       },
       'nuovi_deceduti' = {
         changeVariableColor('Form3', var_descrip[var_descrip$field_name == 'nuovi_deceduti', "field_color"])
-        changeVariableColor('Form3Title', var_descrip[var_descrip$field_name == 'nuovi_deceduti', "field_color"])
+        changeVariableColor('box-title-3', var_descrip[var_descrip$field_name == 'nuovi_deceduti', "field_color"])
         changeNavBarColor(var_descrip[var_descrip$field_name == 'nuovi_deceduti', "field_color"])
+        changeBorderColor('box-3', var_descrip[var_descrip$field_name == 'nuovi_deceduti', "field_color"])
+        changeBorderColor('mapBox', var_descrip[var_descrip$field_name == 'nuovi_deceduti', "field_color"])
       },
       'totale_positivi' = {
         changeVariableColor('Form4', var_descrip[var_descrip$field_name == 'totale_positivi', "field_color"])
-        changeVariableColor('Form4Title', var_descrip[var_descrip$field_name == 'totale_positivi', "field_color"])
+        changeVariableColor('box-title-4', var_descrip[var_descrip$field_name == 'totale_positivi', "field_color"])
         changeNavBarColor(var_descrip[var_descrip$field_name == 'totale_positivi', "field_color"])
+        changeBorderColor('box-4', var_descrip[var_descrip$field_name == 'totale_positivi', "field_color"])
+        changeBorderColor('mapBox', var_descrip[var_descrip$field_name == 'totale_positivi', "field_color"])
       },
       'isolamento_domiciliare' = {
         changeVariableColor('Form5', var_descrip[var_descrip$field_name == 'isolamento_domiciliare', "field_color"])
-        changeVariableColor('Form5Title', var_descrip[var_descrip$field_name == 'isolamento_domiciliare', "field_color"])
+        changeVariableColor('box-title-5', var_descrip[var_descrip$field_name == 'isolamento_domiciliare', "field_color"])
         changeNavBarColor(var_descrip[var_descrip$field_name == 'isolamento_domiciliare', "field_color"])
+        changeBorderColor('box-5', var_descrip[var_descrip$field_name == 'isolamento_domiciliare', "field_color"])
+        changeBorderColor('mapBox', var_descrip[var_descrip$field_name == 'isolamento_domiciliare', "field_color"])
       },
       'totale_ospedalizzati' = {
         changeVariableColor('Form5', var_descrip[var_descrip$field_name == 'totale_ospedalizzati', "field_color"])
-        changeVariableColor('Form5Title', var_descrip[var_descrip$field_name == 'totale_ospedalizzati', "field_color"])
+        changeVariableColor('box-title-5', var_descrip[var_descrip$field_name == 'totale_ospedalizzati', "field_color"])
         changeNavBarColor(var_descrip[var_descrip$field_name == 'totale_ospedalizzati', "field_color"])
+        changeBorderColor('box-5', var_descrip[var_descrip$field_name == 'totale_ospedalizzati', "field_color"])
+        changeBorderColor('mapBox', var_descrip[var_descrip$field_name == 'totale_ospedalizzati', "field_color"])
       },
       'ricoverati_con_sintomi' = {
         changeVariableColor('Form5', var_descrip[var_descrip$field_name == 'ricoverati_con_sintomi', "field_color"])
-        changeVariableColor('Form5Title', var_descrip[var_descrip$field_name == 'ricoverati_con_sintomi', "field_color"])
+        changeVariableColor('box-title-5', var_descrip[var_descrip$field_name == 'ricoverati_con_sintomi', "field_color"])
         changeNavBarColor(var_descrip[var_descrip$field_name == 'ricoverati_con_sintomi', "field_color"])
+        changeBorderColor('box-5', var_descrip[var_descrip$field_name == 'ricoverati_con_sintomi', "field_color"])
+        changeBorderColor('mapBox', var_descrip[var_descrip$field_name == 'ricoverati_con_sintomi', "field_color"])
       },
       'terapia_intensiva' = {
         changeVariableColor('Form5', var_descrip[var_descrip$field_name == 'terapia_intensiva', "field_color"])
-        changeVariableColor('Form5Title', var_descrip[var_descrip$field_name == 'terapia_intensiva', "field_color"])
+        changeVariableColor('box-title-5', var_descrip[var_descrip$field_name == 'terapia_intensiva', "field_color"])
         changeNavBarColor(var_descrip[var_descrip$field_name == 'terapia_intensiva', "field_color"])
+        changeBorderColor('box-5', var_descrip[var_descrip$field_name == 'terapia_intensiva', "field_color"])
+        changeBorderColor('mapBox', var_descrip[var_descrip$field_name == 'terapia_intensiva', "field_color"])
       },
       'positivi_tamponi' = {
         changeVariableColor('Form6', var_descrip[var_descrip$field_name == 'positivi_tamponi', "field_color"])
-        changeVariableColor('Form6Title', var_descrip[var_descrip$field_name == 'positivi_tamponi', "field_color"])
+        changeVariableColor('box-title-6', var_descrip[var_descrip$field_name == 'positivi_tamponi', "field_color"])
         changeNavBarColor(var_descrip[var_descrip$field_name == 'positivi_tamponi', "field_color"])
+        changeBorderColor('box-6', var_descrip[var_descrip$field_name == 'positivi_tamponi', "field_color"])
+        changeBorderColor('mapBox', var_descrip[var_descrip$field_name == 'positivi_tamponi', "field_color"])
       },
       'tamponi' = {
         changeVariableColor('Form7', var_descrip[var_descrip$field_name == 'tamponi', "field_color"])
-        changeVariableColor('Form7Title', var_descrip[var_descrip$field_name == 'tamponi', "field_color"])
+        changeVariableColor('box-title-7', var_descrip[var_descrip$field_name == 'tamponi', "field_color"])
         changeNavBarColor(var_descrip[var_descrip$field_name == 'tamponi', "field_color"])
+        changeBorderColor('box-7', var_descrip[var_descrip$field_name == 'tamponi', "field_color"])
+        changeBorderColor('mapBox', var_descrip[var_descrip$field_name == 'tamponi', "field_color"])
       },
       'nuovi_tamponi' = {
         changeVariableColor('Form7', var_descrip[var_descrip$field_name == 'nuovi_tamponi', "field_color"])
-        changeVariableColor('Form7Title', var_descrip[var_descrip$field_name == 'nuovi_tamponi', "field_color"])
+        changeVariableColor('box-title-7', var_descrip[var_descrip$field_name == 'nuovi_tamponi', "field_color"])
         changeNavBarColor(var_descrip[var_descrip$field_name == 'nuovi_tamponi', "field_color"])
+        changeBorderColor('box-7', var_descrip[var_descrip$field_name == 'nuovi_tamponi', "field_color"])
+        changeBorderColor('mapBox', var_descrip[var_descrip$field_name == 'nuovi_tamponi', "field_color"])
       }
     )
     
