@@ -10,15 +10,7 @@ https://github.com/user-attachments/assets/e49871c2-1a04-4e48-bf08-944fe124ece8
 
 Una versione live della dashboard è disponibile [qui](https://andreazucca.shinyapps.io/Covid19Dashboard/).
 
-## Contesto
-L’app nasce come progetto del corso “Data visualization, data analytics, data modeling” del master universitario di II livello in “Big Data. Metodi statistici per la società della conoscenza”. Il master, organizzato dall’Università degli Studi di Roma “[La Sapienza](https://www.uniroma1.it/it/pagina-strutturale/home)”, è stato frequentato nell’anno accademico 2019/2020.
-
-La dashboard attuale è il risultato di aggiornamenti successivi.
-
 ## Funzionamento
-L’app, sviluppata in R, impiega [Shiny](https://shiny.posit.co/) e [Shiny Dashboard](https://rstudio.github.io/shinydashboard/).  
-I grafici interativi sono realizzati utilizzando la libreria [Plotly](https://plotly.com/r/).  
-La bubble map si avvale della libreria [Leaflet](https://leafletjs.com/).  
 A ogni accesso l’app scarica e elabora i dati italiani sull’epidemia da Covid-19.
 
 ## Fonti
