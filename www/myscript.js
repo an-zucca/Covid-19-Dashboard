@@ -1,10 +1,36 @@
 Shiny.addCustomMessageHandler ('changeVariableColor',function (m) {
-  var element = $('#'+m.id);
-  element.css({'color': m.color});
+  element = document.getElementById(m.id);
+  element.style.color = m.color;
   });
+
+Shiny.addCustomMessageHandler ('printHelloWorld',function (m) {
+  console.log(m.color);
+  });
+
 
 Shiny.addCustomMessageHandler ('changeFormTitle',function (m) {
   document.getElementById(m.id).innerHTML = m.value;
+});
+
+Shiny.addCustomMessageHandler ('disabledButton',function (m) {
+  document.getElementById(m.id).disabled = m.value;
+});
+
+
+Shiny.addCustomMessageHandler("testmessage",
+  function(message) {
+    alert(message);
+  }
+);
+
+Shiny.addCustomMessageHandler ('changeBorderColor',function (m) {
+  var element = document.getElementById(m.id).closest('.box');
+  element.style.borderTopColor = m.color;
+});
+
+Shiny.addCustomMessageHandler ('changeBgColor',function (m) {
+  var element = document.getElementById(m.id);
+  element.style.backgroundColor = m.color;
 });
        
 Shiny.addCustomMessageHandler ('changeNavBarColor',function (m) {
