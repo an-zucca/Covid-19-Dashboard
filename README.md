@@ -14,7 +14,7 @@ https://github.com/an-zucca/covid-19-dashboard/assets/75362160/35b8a9ba-3339-4a5
 L’app nasce come progetto del corso “Data visualization, data analytics, data modeling” del master universitario di II livello “Big Data. Metodi statistici per la società della conoscenza”.  
 Il master, organizzato dall’[Università degli Studi di Roma “La Sapienza”](https://www.uniroma1.it/it/pagina-strutturale/home), è stato frequentato nell’anno accademico 2019/2020.  
 
-Lo sviluppo continua nei mesi seguenti.
+La versione attuale è frutto di miglioramenti apportati nel tempo.
 
 ## Funzionamento
 L’app, sviluppata in R, impiega [Shiny](https://shiny.posit.co/) e [Shiny Dashboard](https://rstudio.github.io/shinydashboard/).  
