@@ -11,10 +11,9 @@ Visita l'app [qui](https://andreazucca.shinyapps.io/Covid19Dashboard/).
 https://github.com/an-zucca/covid-19-dashboard/assets/75362160/35b8a9ba-3339-4a51-bd96-d13e6de18238
 
 ## Contesto
-L’app nasce come progetto del corso “Data visualization, data analytics, data modeling” del master universitario di II livello “Big Data. Metodi statistici per la società della conoscenza”.  
-Il master, organizzato dall’[Università degli Studi di Roma “La Sapienza”](https://www.uniroma1.it/it/pagina-strutturale/home), è stato frequentato nell’anno accademico 2019/2020.  
+L’app nasce come progetto del corso “Data visualization, data analytics, data modeling” del master universitario di II livello “Big Data. Metodi statistici per la società della conoscenza”. Il master, organizzato dall’Università degli Studi di Roma “[La Sapienza](https://www.uniroma1.it/it/pagina-strutturale/home)”, è stato frequentato nell’anno accademico 2019/2020.
 
-La versione attuale è frutto di miglioramenti apportati nel tempo.
+La versione attuale della dashboard è il risultato di interventi effettuati a più riprese.
 
 ## Funzionamento
 L’app, sviluppata in R, impiega [Shiny](https://shiny.posit.co/) e [Shiny Dashboard](https://rstudio.github.io/shinydashboard/).  
