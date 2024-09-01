@@ -14,7 +14,7 @@ Una versione live della dashboard è disponibile [qui](https://andreazucca.shiny
 A ogni accesso l’app scarica e elabora i dati italiani sull’epidemia da Covid-19.
 
 ## Fonti
-I dati sulla pandemia, aggiornati a cadenza giornaliera, sono [condivisi](https://github.com/pcm-dpc/COVID-19) dal [Dipartimento della Protezione Civile](https://www.protezionecivile.gov.it/it/).  
+I dati giornalieri sulla pandemia sono [condivisi](https://github.com/pcm-dpc/COVID-19) dal [Dipartimento della Protezione Civile](https://www.protezionecivile.gov.it/it/).  
 La mappa che consente di selezionare le regioni di interesse è realizzata utilizzando gli [shape file](https://www.istat.it/notizia/confini-delle-unita-amministrative-a-fini-statistici-al-1-gennaio-2018-2/) forniti dall’[Istat](https://www.istat.it/).
 
 ## Crediti
