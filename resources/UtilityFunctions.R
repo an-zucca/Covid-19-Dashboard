@@ -171,12 +171,12 @@ f_ret_format_incr_variab <- function(data,
   }
   if (perc == 1) {
     variab_value <- data[[variab]]
-    incr_perc_value = 100 * incr_variab_value / variab_value
+    incr_perc_value = ((variab_value-(variab_value-incr_variab_value))/(variab_value-incr_variab_value))*100
     
     return(paste0(
       sign_incr_variab,
       format(
-        round(incr_perc_value, 2),
+        round(incr_perc_value, 3),
         nsmall = 2,
         big.mark = ".",
         decimal.mark = ","
