@@ -6,7 +6,7 @@
 
 Una [Shiny app](https://shiny.posit.co/) che riporta l'andamento della pandemia di Covid-19 in Italia.
 
-https://github.com/user-attachments/assets/e49871c2-1a04-4e48-bf08-944fe124ece8
+https://github.com/user-attachments/assets/90b88e9f-a661-4490-b319-6d7256510276
 
 Una versione live della dashboard è disponibile [qui](https://andreazucca.shinyapps.io/Covid19Dashboard/).
 
