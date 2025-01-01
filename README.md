@@ -8,8 +8,6 @@ Una [Shiny app](https://shiny.posit.co/) che riporta l'andamento della pandemia 
 
 https://github.com/user-attachments/assets/90b88e9f-a661-4490-b319-6d7256510276
 
-Una versione live della dashboard è disponibile [qui](https://andreazucca.shinyapps.io/Covid19Dashboard/).
-
 ## Funzionamento
 A ogni accesso l’app scarica e elabora i dati italiani sull’epidemia da Covid-19.
 
